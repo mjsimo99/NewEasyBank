@@ -8,9 +8,14 @@ import java.util.Optional;
 
 public interface IEmploye extends IPersonne {
     Optional<List<Employe>> SearchByMatricule(String matricule);
+
     boolean Delete(String marticule);
+
     Optional<List<Employe>> ShowList();
+
     Optional<List<Employe>> SearchByDateR(LocalDate dateRecrutement);
+
     Optional<Employe> Update(Employe employe);
 
+    Employe getEmployeById(String matricule);
 }
