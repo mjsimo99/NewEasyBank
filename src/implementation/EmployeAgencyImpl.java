@@ -34,9 +34,31 @@ public class EmployeAgencyImpl implements IEmployeAgency {
     }
 
     @Override
-    public Optional<EmployeAgency> muter(EmployeAgency employeAgency) {
+    public Optional<EmployeAgency> muter(String oldAgencyCode, String newAgencyCode, EmployeAgency employeAgency) {
+        Connection connection = DatabaseConnection.getConn();
+
+        try {
+            String updateQuery = "UPDATE EmployesAgency SET agence_code = ?, datedebut = ?, datefin = ? WHERE employe_matricule = ? AND agence_code = ?";
+            PreparedStatement updateStatement = connection.prepareStatement(updateQuery);
+            updateStatement.setString(1, newAgencyCode);
+            updateStatement.setDate(2, java.sql.Date.valueOf(employeAgency.getDatedebut()));
+            updateStatement.setDate(3, java.sql.Date.valueOf(employeAgency.getDatefin()));
+            updateStatement.setString(4, employeAgency.getEmploye().getMatricule());
+            updateStatement.setString(5, oldAgencyCode);
+
+            int rowsUpdated = updateStatement.executeUpdate();
+
+            if (rowsUpdated > 0) {
+                return Optional.of(employeAgency);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
         return Optional.empty();
     }
+
+
 
     @Override
     public Optional<List<EmployeAgency>> ShowList() {

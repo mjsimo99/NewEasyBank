@@ -26,6 +26,7 @@ public class SEMployeAgency {
 
             switch (choice) {
                 case 1 -> affecterEmployeAgency(scanner, employeAgencyService,employeService,agenceService);
+                case 2 -> muterEmployeAgency(scanner, employeAgencyService,employeService,agenceService);
 
                 case 4 -> {
                     return;
@@ -73,6 +74,52 @@ public class SEMployeAgency {
             System.out.println("Agency with code " + agencyCode + " not found.");
         }
     }
+    public static void muterEmployeAgency(Scanner scanner, IEmployeAgency employeAgencyService, IEmploye employeService, IAgence agenceService) {
+        System.out.println("Muter EmployeAgency");
 
+        System.out.print("Enter employee matricule: ");
+        String matricule = scanner.nextLine();
 
+        System.out.print("Enter old agency code: ");
+        String oldAgencyCode = scanner.nextLine();
+
+        System.out.print("Enter new agency code: ");
+        String newAgencyCode = scanner.nextLine();
+
+        System.out.print("Enter start date (yyyy-MM-dd): ");
+        String startDateStr = scanner.nextLine();
+        LocalDate startDate = LocalDate.parse(startDateStr);
+
+        System.out.print("Enter end date (yyyy-MM-dd): ");
+        String endDateStr = scanner.nextLine();
+        LocalDate endDate = LocalDate.parse(endDateStr);
+
+        Optional<Agence> oldAgenceOptional = agenceService.SearchByCode(oldAgencyCode);
+        Optional<Agence> newAgenceOptional = agenceService.SearchByCode(newAgencyCode);
+
+        if (oldAgenceOptional.isPresent() && newAgenceOptional.isPresent()) {
+            Agence oldAgence = oldAgenceOptional.get();
+            Agence newAgence = newAgenceOptional.get();
+
+            Employe employe = employeService.getEmployeById(matricule);
+
+            EmployeAgency employeAgency = new EmployeAgency(oldAgence, employe, startDate, endDate);
+
+            Optional<EmployeAgency> result = employeAgencyService.muter(oldAgencyCode, newAgencyCode, employeAgency);
+
+            if (result.isPresent()) {
+                System.out.println("Employee has been transferred to the new agency successfully.");
+            } else {
+                System.out.println("Failed to transfer the employee to the new agency.");
+            }
+        } else {
+            if (oldAgenceOptional.isEmpty()) {
+                System.out.println("Old agency with code " + oldAgencyCode + " not found.");
+            }
+            if (newAgenceOptional.isEmpty()) {
+                System.out.println("New agency with code " + newAgencyCode + " not found.");
+            }
+        }
+    }
 }
+
