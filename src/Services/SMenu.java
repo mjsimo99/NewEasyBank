@@ -18,7 +18,7 @@ public class SMenu {
     private static final IOperation operationService = new OperationSimple();
     private static final ICompte compteCourantService = new CompteCourantImpl();
     private static final ICompte compteEpargneService = new CompteEpargneImpl();
-    private static final IAgence agenceService = new AgenceImpl(DatabaseConnection.getConn());
+    private static final IAgence agenceService = new AgenceImpl();
 
 
     private static final Scanner scanner = new Scanner(System.in);

@@ -17,6 +17,7 @@ public class SAgence {
             System.out.println("Affectation Management Menu:");
             System.out.println("1. Create New Agence");
             System.out.println("2. Search Agence By Code");
+            System.out.println("3. Delete Agence");
 
             System.out.println("5. Back to Main Menu");
 
@@ -27,6 +28,8 @@ public class SAgence {
             switch (choice) {
                 case 1 -> addAgence(scanner, agenceService);
                 case 2 -> searchAgenceByCode(scanner, agenceService);
+                case 3 -> deleteAgence(scanner, agenceService);
+
                 case 5 -> {
                     return;
                 }
@@ -79,5 +82,18 @@ public class SAgence {
         }
     }
 
+    public static void deleteAgence(Scanner scanner, IAgence agenceService) {
+        System.out.println("Delete Agence");
+        System.out.print("Enter Code of the Agence to delete: ");
+        String codeToDelete = scanner.nextLine();
+
+        boolean isDeleted = agenceService.Delete(codeToDelete);
+
+        if (isDeleted) {
+            System.out.println("Agence with code " + codeToDelete + " deleted successfully!");
+        } else {
+            System.out.println("Failed to delete Agence with code " + codeToDelete + ".");
+        }
+    }
 
 }

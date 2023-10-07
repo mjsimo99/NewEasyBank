@@ -3,6 +3,7 @@ package implementation;
 import dto.Agence;
 import dto.Compte;
 import dto.Employe;
+import helper.DatabaseConnection;
 import interfeces.IAgence;
 
 import java.sql.Connection;
@@ -13,15 +14,15 @@ import java.util.List;
 import java.util.Optional;
 
 public class AgenceImpl implements IAgence {
-    private final Connection connection;
-    public AgenceImpl(Connection connection) {
-        this.connection = connection;
-    }
+
     private static final String ADDAGENCE = "INSERT INTO Agences (code, nom, adresse, tel) VALUES (?, ?, ?, ?)";
     private static final String SEARCHBYCODE = "SELECT * FROM Agences WHERE code = ?";
+    private static final String DELETEBYCODE = "DELETE FROM Agences WHERE code = ?";
+
 
     @Override
     public Optional<Agence> Add(Agence agence) {
+        Connection connection = DatabaseConnection.getConn();
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(ADDAGENCE)) {
             preparedStatement.setString(1, agence.getCode());
@@ -43,6 +44,8 @@ public class AgenceImpl implements IAgence {
 
     @Override
     public Optional<Agence> SearchByCode(Agence agence) {
+        Connection connection = DatabaseConnection.getConn();
+
         try (PreparedStatement preparedStatement = connection.prepareStatement(SEARCHBYCODE)) {
             preparedStatement.setString(1, agence.getCode());
 
@@ -63,7 +66,16 @@ public class AgenceImpl implements IAgence {
 
     @Override
     public boolean Delete(String code) {
-        return false;
+        Connection connection = DatabaseConnection.getConn();
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(DELETEBYCODE)) {
+            preparedStatement.setString(1, code);
+
+            int rowsDeleted = preparedStatement.executeUpdate();
+            return rowsDeleted > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
