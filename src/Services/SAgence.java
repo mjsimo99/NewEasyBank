@@ -4,6 +4,7 @@ import dto.Agence;
 
 import interfeces.IAgence;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -18,6 +19,8 @@ public class SAgence {
             System.out.println("1. Create New Agence");
             System.out.println("2. Search Agence By Code");
             System.out.println("3. Delete Agence");
+            System.out.println("4. Search Agence By Address");
+
 
             System.out.println("5. Back to Main Menu");
 
@@ -29,6 +32,7 @@ public class SAgence {
                 case 1 -> addAgence(scanner, agenceService);
                 case 2 -> searchAgenceByCode(scanner, agenceService);
                 case 3 -> deleteAgence(scanner, agenceService);
+                case 4 -> searchByAddress(scanner, agenceService);
 
                 case 5 -> {
                     return;
@@ -76,7 +80,7 @@ public class SAgence {
 
         if (foundAgence.isPresent()) {
             System.out.println("Agence found:");
-            System.out.println(foundAgence.get()); // Use the toString method
+            System.out.println(foundAgence.get());
         } else {
             System.out.println("No Agence found with the provided code.");
         }
@@ -95,5 +99,19 @@ public class SAgence {
             System.out.println("Failed to delete Agence with code " + codeToDelete + ".");
         }
     }
+    public static void searchByAddress(Scanner scanner, IAgence agenceService) {
+        System.out.print("Enter Agence Address: ");
+        String address = scanner.nextLine();
 
+        List<Agence> foundAgences = agenceService.SearchByAdress(address);
+
+        if (!foundAgences.isEmpty()) {
+            System.out.println("Found Agences:");
+            for (Agence agence : foundAgences) {
+                System.out.println(agence);
+            }
+        } else {
+            System.out.println("No Agences found with the provided address.");
+        }
+    }
 }

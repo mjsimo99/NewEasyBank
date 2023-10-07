@@ -11,7 +11,7 @@ public interface IAgence {
     boolean Delete(String code);
     Optional<Agence> Update(Agence agence);
     List<Agence> SearchByEmployee(Employe employe);
-    List<Compte> SearchByAdress(String adresse);
+    List<Agence> SearchByAdress(String adresse);
 
 
 }

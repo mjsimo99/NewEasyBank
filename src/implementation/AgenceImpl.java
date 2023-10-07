@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +19,9 @@ public class AgenceImpl implements IAgence {
     private static final String ADDAGENCE = "INSERT INTO Agences (code, nom, adresse, tel) VALUES (?, ?, ?, ?)";
     private static final String SEARCHBYCODE = "SELECT * FROM Agences WHERE code = ?";
     private static final String DELETEBYCODE = "DELETE FROM Agences WHERE code = ?";
+    private static final String SEARCHBYADRESS = "SELECT * FROM Agences WHERE adresse = ?";
+
+
 
 
     @Override
@@ -89,7 +93,28 @@ public class AgenceImpl implements IAgence {
     }
 
     @Override
-    public List<Compte> SearchByAdress(String adresse) {
-        return null;
+    public List<Agence> SearchByAdress(String adresse) {
+        List<Agence> agences = new ArrayList<>();
+        Connection connection = DatabaseConnection.getConn();
+
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SEARCHBYADRESS)) {
+            preparedStatement.setString(1, adresse);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                String agenceCode = resultSet.getString("code");
+                String nom = resultSet.getString("nom");
+                String tel = resultSet.getString("tel");
+
+                Agence agence = new Agence(agenceCode, nom, adresse, tel, null, null, null);
+                agences.add(agence);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return agences;
     }
+
 }
