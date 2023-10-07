@@ -18,5 +18,7 @@ public class Agence {
     private List<Compte> comptes;
     private List<EmployeAgency> employeAgencies;
 
-
+    public Agence(String code) {
+        this.code = code;
+    }
 }

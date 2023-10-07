@@ -48,14 +48,16 @@ public class AgenceImpl implements IAgence {
     }
 
     @Override
-    public Optional<Agence> SearchByCode(Agence agence) {
+    public Optional<Agence> SearchByCode(String code) {
         Connection connection = DatabaseConnection.getConn();
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(SEARCHBYCODE)) {
-            preparedStatement.setString(1, agence.getCode());
+            preparedStatement.setString(1, code);
 
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
+                Agence agence = new Agence();
+                agence.setCode(resultSet.getString("code"));
                 agence.setNom(resultSet.getString("nom"));
                 agence.setAdresse(resultSet.getString("adresse"));
                 agence.setTel(resultSet.getString("tel"));

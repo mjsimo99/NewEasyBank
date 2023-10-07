@@ -74,9 +74,7 @@ public class SAgence {
         System.out.print("Enter Code: ");
         String code = scanner.nextLine();
 
-        Agence searchAgence = new Agence(code, null, null, null, null, null, null);
-
-        Optional<Agence> foundAgence = agenceService.SearchByCode(searchAgence);
+        Optional<Agence> foundAgence = agenceService.SearchByCode(code);
 
         if (foundAgence.isPresent()) {
             System.out.println("Agence found:");
@@ -85,6 +83,7 @@ public class SAgence {
             System.out.println("No Agence found with the provided code.");
         }
     }
+
 
     public static void deleteAgence(Scanner scanner, IAgence agenceService) {
         System.out.println("Delete Agence");
@@ -121,8 +120,7 @@ public class SAgence {
         System.out.print("Enter Code of the Agence to update: ");
         String codeToUpdate = scanner.nextLine();
 
-        Agence existingAgence = new Agence(codeToUpdate, null, null, null, null, null, null);
-        Optional<Agence> foundAgence = agenceService.SearchByCode(existingAgence);
+        Optional<Agence> foundAgence = agenceService.SearchByCode(codeToUpdate);
 
         if (foundAgence.isPresent()) {
             System.out.println("Agence found:");
@@ -159,4 +157,5 @@ public class SAgence {
             System.out.println("No Agence found with the provided code.");
         }
     }
+
 }

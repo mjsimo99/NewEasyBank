@@ -12,5 +12,5 @@ public interface IEmploye extends IPersonne {
     Optional<List<Employe>> ShowList();
     Optional<List<Employe>> SearchByDateR(LocalDate dateRecrutement);
     Optional<Employe> Update(Employe employe);
-
+    Employe getEmployeById(String matricule);
 }
