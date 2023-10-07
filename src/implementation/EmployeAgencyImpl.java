@@ -12,7 +12,6 @@ import java.util.Optional;
 
 public class EmployeAgencyImpl implements IEmployeAgency {
     private static final String INSERT_EMPLOYE_AGENCY = "INSERT INTO EmployesAgency (employe_matricule, agence_code, datedebut, datefin) VALUES (?, ?, ?, ?)";
-
     @Override
     public Optional<EmployeAgency> Affecter(EmployeAgency employeAgency) {
         Connection connection = DatabaseConnection.getConn();
@@ -33,6 +32,7 @@ public class EmployeAgencyImpl implements IEmployeAgency {
 
         return Optional.empty();
     }
+
     @Override
     public Optional<EmployeAgency> muter(EmployeAgency employeAgency) {
         return Optional.empty();
