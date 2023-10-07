@@ -19,7 +19,7 @@ public class AgenceImpl implements IAgence {
     private static final String ADDAGENCE = "INSERT INTO Agences (code, nom, adresse, tel) VALUES (?, ?, ?, ?)";
     @Override
     public Optional<Agence> Add(Agence agence) {
-        /*
+
         try (PreparedStatement preparedStatement = connection.prepareStatement(ADDAGENCE)) {
             preparedStatement.setString(1, agence.getCode());
             preparedStatement.setString(2, agence.getNom());
@@ -35,8 +35,7 @@ public class AgenceImpl implements IAgence {
         }
         return Optional.empty();
 
-         */
-        return null;
+
     }
 
     @Override
