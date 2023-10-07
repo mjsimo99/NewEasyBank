@@ -37,7 +37,6 @@ public class SAgence {
     }
 
     public static void addAgence(Scanner scanner, IAgence agenceService) {
-        /*
         System.out.println("Add New Agence");
         System.out.print("Enter Code: ");
         String code = scanner.nextLine();
@@ -61,7 +60,6 @@ public class SAgence {
             System.out.println("Failed to add Agence.");
         }
 
-         */
     }
 
 
