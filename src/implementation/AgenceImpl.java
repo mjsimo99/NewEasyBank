@@ -20,6 +20,7 @@ public class AgenceImpl implements IAgence {
     private static final String SEARCHBYCODE = "SELECT * FROM Agences WHERE code = ?";
     private static final String DELETEBYCODE = "DELETE FROM Agences WHERE code = ?";
     private static final String SEARCHBYADRESS = "SELECT * FROM Agences WHERE adresse = ?";
+    private static final String UPDATEBYCODE =  "UPDATE Agences SET nom = ?, adresse = ?, tel = ? WHERE code = ?";
 
 
 
@@ -84,8 +85,22 @@ public class AgenceImpl implements IAgence {
 
     @Override
     public Optional<Agence> Update(Agence agence) {
-        return Optional.empty();
+        Connection connection = DatabaseConnection.getConn();
+        try (
+                PreparedStatement preparedStatement = connection.prepareStatement(UPDATEBYCODE)
+        ) {
+            preparedStatement.setString(1, agence.getNom());
+            preparedStatement.setString(2, agence.getAdresse());
+            preparedStatement.setString(3, agence.getTel());
+            preparedStatement.setString(4, agence.getCode());
+
+            int rowsUpdated = preparedStatement.executeUpdate();
+            return (rowsUpdated > 0) ? Optional.of(agence) : Optional.empty();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
+
 
     @Override
     public List<Agence> SearchByEmployee(Employe employe) {
