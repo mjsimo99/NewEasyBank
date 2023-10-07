@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface IAgence {
     Optional<Agence> Add(Agence agence);
-    List<Compte> SearchByCode(String code);
+    Optional<Agence> SearchByCode(Agence agence);
     boolean Delete(String code);
     Optional<Agence> Update(Agence agence);
     List<Agence> SearchByEmployee(Employe employe);

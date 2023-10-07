@@ -15,10 +15,9 @@ public class SAgence {
     public static void agenceManagement(Scanner scanner, IAgence agenceService) {
         while (true) {
             System.out.println("Affectation Management Menu:");
-            System.out.println("1. Create New Affectation");
-            System.out.println("2. Delete Affectation");
-            System.out.println("3. Show All Affectations");
-            System.out.println("4. Show Assignment History by Matricule");
+            System.out.println("1. Create New Agence");
+            System.out.println("2. Search Agence By Code");
+
             System.out.println("5. Back to Main Menu");
 
             System.out.print("Enter your choice (1-5): ");
@@ -26,8 +25,8 @@ public class SAgence {
             scanner.nextLine();
 
             switch (choice) {
-                case 1 -> addAgence(scanner,agenceService);
-
+                case 1 -> addAgence(scanner, agenceService);
+                case 2 -> searchAgenceByCode(scanner, agenceService);
                 case 5 -> {
                     return;
                 }
@@ -51,7 +50,7 @@ public class SAgence {
         System.out.print("Enter Tel: ");
         String tel = scanner.nextLine();
 
-        Agence newAgence = new Agence(code, nom, adresse, tel);
+        Agence newAgence = new Agence(code, nom, adresse, tel,null,null,null);
 
         Optional<Agence> addedAgence = agenceService.Add(newAgence);
 
@@ -62,6 +61,22 @@ public class SAgence {
         }
 
 
+    }
+    public static void searchAgenceByCode(Scanner scanner, IAgence agenceService) {
+        System.out.println("Search Agence By Code");
+        System.out.print("Enter Code: ");
+        String code = scanner.nextLine();
+
+        Agence searchAgence = new Agence(code, null, null, null, null, null, null);
+
+        Optional<Agence> foundAgence = agenceService.SearchByCode(searchAgence);
+
+        if (foundAgence.isPresent()) {
+            System.out.println("Agence found:");
+            System.out.println(foundAgence.get()); // Use the toString method
+        } else {
+            System.out.println("No Agence found with the provided code.");
+        }
     }
 
 

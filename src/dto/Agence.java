@@ -8,6 +8,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class Agence {
     private String code;
     private String nom;
@@ -17,10 +18,5 @@ public class Agence {
     private List<Compte> comptes;
     private List<EmployeAgency> employeAgencies;
 
-    public Agence(String code, String nom, String adresse, String tel) {
-        this.code = code;
-        this.nom = nom;
-        this.adresse = adresse;
-        this.tel = tel;
-    }
+
 }
