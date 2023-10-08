@@ -19,6 +19,7 @@ public class SMenu {
     private static final IAgence agenceService = new AgenceImpl();
     private static final IEmployeAgency employeAgencyService = new EmployeAgencyImpl();
     private static final CompteCourantImpl compteService = new CompteCourantImpl();
+    private static final VirementImpl virementService = new VirementImpl();
 
 
     private static final Scanner scanner = new Scanner(System.in);
@@ -35,8 +36,8 @@ public class SMenu {
             System.out.println("7. Operation Management");
             System.out.println("8. Agence Management");
             System.out.println("9. EmployeAgence Management");
-
-            System.out.println("10. Exit");
+            System.out.println("10. Verement Management");
+            System.out.println("11. Exit");
 
             System.out.print("Enter your choice : ");
             int choice = scanner.nextInt();
@@ -71,6 +72,9 @@ public class SMenu {
                     SEMployeAgency.employeAgencyManagement(scanner, employeAgencyService, employeService, agenceService);
                     break;
                 case 10:
+                    SVerement.virementManagement(scanner, virementService, compteService);
+                    break;
+                case 11:
                     scanner.close();
                     System.exit(0);
                 default:
