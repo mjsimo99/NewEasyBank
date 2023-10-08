@@ -85,7 +85,6 @@ public class SOperation {
         System.out.print("Enter Operation Number to search: ");
         String operationNumber = scanner.nextLine();
 
-
         List<Operation> operations = operationService.SearchByNumber(operationNumber);
 
         if (!operations.isEmpty()) {
