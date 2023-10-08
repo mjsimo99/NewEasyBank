@@ -60,7 +60,7 @@ public class SMenu {
                     SCOmpteC.compteCourantManagement(scanner, compteCourantService,agenceService);
                     break;
                 case 6:
-                    SCOmpteE.compteEpargneManagement(scanner, compteEpargneService);
+                    SCOmpteE.compteEpargneManagement(scanner, compteEpargneService,agenceService);
                     break;
                 case 7:
                     SOperation.operationManagement(scanner, operationService);
