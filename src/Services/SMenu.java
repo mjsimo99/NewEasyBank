@@ -57,7 +57,7 @@ public class SMenu {
                     SAffectation.affectationManagement(scanner, affectationService, employeService, missionService);
                     break;
                 case 5:
-                    SCOmpteC.compteCourantManagement(scanner, compteCourantService);
+                    SCOmpteC.compteCourantManagement(scanner, compteCourantService,agenceService);
                     break;
                 case 6:
                     SCOmpteE.compteEpargneManagement(scanner, compteEpargneService);

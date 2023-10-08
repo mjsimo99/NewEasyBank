@@ -1,10 +1,6 @@
 package implementation;
 
-import dto.Client;
-import dto.Compte;
-import dto.CompteEpargne;
-import dto.EtatCompte;
-import dto.Operation;
+import dto.*;
 import helper.DatabaseConnection;
 import interfeces.ICompte;
 
@@ -45,8 +41,8 @@ public final class CompteEpargneImpl implements ICompte {
             "FROM Comptes c " +
             "LEFT JOIN ComptesEpargnes ce ON c.numero = ce.numeroCompte " +
             "WHERE c.dateCreation = ?";
-
-    public static Compte GetByNumero(String numero) {
+    private static final String AFFECTECOMPTE = "UPDATE Comptes SET agence_code = ? WHERE numero = ?";
+    public  Compte GetByNumero(String numero) {
         Connection connection = DatabaseConnection.getConn();
         Compte compte = null;
 
@@ -297,5 +293,25 @@ public final class CompteEpargneImpl implements ICompte {
         }
 
         return compteList;
+    }
+
+    @Override
+    public Optional<Compte> AffectCompteToAgance(Compte compte, Agence agence) {
+        if (compte != null && agence != null) {
+            Connection connection = DatabaseConnection.getConn();
+            try (PreparedStatement updateCompteStatement = connection.prepareStatement(AFFECTECOMPTE)) {
+                updateCompteStatement.setString(1, agence.getCode());
+                updateCompteStatement.setString(2, compte.getNumero());
+
+                int rowsUpdated = updateCompteStatement.executeUpdate();
+                if (rowsUpdated > 0) {
+                    compte.setAgence(agence);
+                    return Optional.of(compte);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return Optional.empty();
     }
 }

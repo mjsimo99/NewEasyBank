@@ -121,8 +121,10 @@ public class SCOmpteE {
     private static void updateCompteEpargneStatusByNumero(Scanner scanner, ICompte compteEpargneService) {
         System.out.print("Enter Compte Epargne Numero to update status: ");
         String numero = scanner.nextLine();
+        CompteEpargneImpl compteCourantImpl = new CompteEpargneImpl();
 
-        Compte existingCompte = CompteEpargneImpl.GetByNumero(numero);
+        Compte existingCompte = compteCourantImpl.GetByNumero(numero);
+
 
         if (existingCompte == null) {
             System.out.println("No Compte Epargne found with the specified Numero.");
