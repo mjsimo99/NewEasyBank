@@ -14,6 +14,7 @@ import java.util.Optional;
 public class VirementImpl  implements IVerement {
     private static final String ADD_VIREMENT = "INSERT INTO verements (numero, dateCreation, montant, expediteur, Beneficiaire) VALUES (?, ?, ?, ?, ?)";
     ;
+    private static final String DELETE_VIREMENT = "INSERT INTO verements (numero, dateCreation, montant, expediteur, Beneficiaire) VALUES (?, ?, ?, ?, ?)";
 
     @Override
     public Optional<Operation> Add(Operation operation) {
@@ -48,6 +49,16 @@ public class VirementImpl  implements IVerement {
 
     @Override
     public boolean Delete(String numero) {
-        return false;
+        Connection connection = DatabaseConnection.getConn();
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_VIREMENT)) {
+            preparedStatement.setString(1, numero);
+
+            int rowsDeleted = preparedStatement.executeUpdate();
+            return rowsDeleted > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
+
 }
