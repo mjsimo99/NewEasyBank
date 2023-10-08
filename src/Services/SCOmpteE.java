@@ -161,9 +161,32 @@ public class SCOmpteE {
         }
     }
 
-    private static void searchCompteEpargneByOperation(Scanner scanner, ICompte compteEpargneService) {
+    private static void searchCompteEpargneByOperation(Scanner scanner, ICompte compteEpargeService) {
+        System.out.print("Enter Operation Type (versement or retrait): ");
+        String operationType = scanner.nextLine();
 
+        TypeOperation typeOperation;
+        try {
+            typeOperation = TypeOperation.valueOf(operationType);
+        } catch (IllegalArgumentException e) {
+            System.err.println("Invalid Operation Type. Please enter 'versement' or 'retrait'.");
+            return;
+        }
+
+        Operation operation = new OperationSimple(null,null,null,typeOperation,null,null);
+        List<Compte> comptes = compteEpargeService.SearchByOperation(operation);
+
+        if (comptes.isEmpty()) {
+            System.out.println("No Comptes found for the specified Operation Type.");
+        } else {
+            System.out.println("Comptes for Operation Type '" + operationType + "':");
+            for (Compte compte : comptes) {
+                System.out.println(compte);
+            }
+        }
     }
+
+
 
     private static void filterComptesEpargneByStatus(Scanner scanner, ICompte compteEpargneService) {
         System.out.print("Enter Status (ACTIVE or INACTIVE): ");

@@ -30,7 +30,7 @@ public final class CompteCourantImpl implements ICompte {
     private static final String SEARCH_BY_OPERATION = "SELECT c.numero, c.sold, c.dateCreation, c.etat, cc.decouvert " +
             "FROM Comptes c " +
             "LEFT JOIN ComptesCourants cc ON c.numero = cc.numeroCompte " +
-            "INNER JOIN Operations ao ON c.numero = ao.compte_numero " +
+            "INNER JOIN OperationsSimple ao ON c.numero = ao.numeroCompte " +
             "WHERE ao.type = ?";
     private static final String FILTER_BY_STATUS = "SELECT c.numero, c.sold, c.dateCreation, c.etat, cc.decouvert " +
             "FROM Comptes c " +
