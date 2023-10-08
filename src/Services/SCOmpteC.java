@@ -157,7 +157,28 @@ public class SCOmpteC {
         }
     }
     private static void searchCompteCourantByOperation(Scanner scanner, ICompte compteCourantService) {
+        System.out.print("Enter Operation Type (versement or retrait): ");
+        String operationType = scanner.nextLine();
 
+        TypeOperation typeOperation;
+        try {
+            typeOperation = TypeOperation.valueOf(operationType);
+        } catch (IllegalArgumentException e) {
+            System.err.println("Invalid Operation Type. Please enter 'versement' or 'retrait'.");
+            return;
+        }
+
+        OperationSimple operationSimple = new OperationSimple(null,null,null,typeOperation,null,null);
+        List<Compte> comptes = compteCourantService.SearchByOperation(operationSimple);
+
+        if (comptes.isEmpty()) {
+            System.out.println("No Comptes found for the specified Operation Type.");
+        } else {
+            System.out.println("Comptes for Operation Type '" + operationType + "':");
+            for (Compte compte : comptes) {
+                System.out.println(compte);
+            }
+        }
     }
 
     private static void filterComptesCourantByStatus(Scanner scanner, ICompte compteCourantService) {
