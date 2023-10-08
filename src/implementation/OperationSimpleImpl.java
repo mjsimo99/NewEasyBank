@@ -17,8 +17,6 @@ public class OperationSimpleImpl implements IOperation {
     private static final String ADD_OPERATION = "INSERT INTO operationssimple (numero, datecreation, montant, type, employe_matricule, numeroCompte) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String SEARCH_BY_NUMBER = "SELECT * FROM operationssimple WHERE numero=?";
     private static final String DELETE_OPERATION = "DELETE FROM operationssimple WHERE numero=?";
-    private static final String GET_COMPTE_EPARGNE = "SELECT * FROM ComptesEpargnes WHERE numeroCompte = ?";
-    private static final String GET_COMPTE_COURANT = "SELECT * FROM ComptesCourants WHERE numeroCompte = ?";
 
 
     @Override
