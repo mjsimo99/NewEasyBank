@@ -1,8 +1,10 @@
 package dto;
 
+import lombok.Data;
+
 import java.time.LocalDate;
 import java.util.List;
-
+@Data
 public abstract class Compte {
 
     protected String numero;
@@ -11,7 +13,8 @@ public abstract class Compte {
     protected EtatCompte etat;
     protected Client client;
     protected Employe employe;
-    List<Operation> operations;
+    protected List<Operation> operations;
+    protected Agence agence;
 
 
     public Compte(String numero, double sold, LocalDate dateCreation, EtatCompte etat, Client client,Employe employe,List<Operation> operations) {
@@ -24,61 +27,7 @@ public abstract class Compte {
         setOperations(operations);
     }
 
-    public List<Operation> getOperations() {
-        return operations;
-    }
 
-    public void setOperations(List<Operation> operations) {
-        this.operations = operations;
-    }
-
-    public Employe getEmploye() {
-        return employe;
-    }
-
-    public void setEmploye(Employe employe) {
-        this.employe = employe;
-    }
-
-    public Client getClient() {
-        return client;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
-    }
-
-    public String getNumero() {
-        return numero;
-    }
-
-    public void setNumero(String numero) {
-        this.numero = numero;
-    }
-
-    public double getSold() {
-        return sold;
-    }
-
-    public void setSold(double sold) {
-        this.sold = sold;
-    }
-
-    public LocalDate getDateCreation() {
-        return dateCreation;
-    }
-
-    public void setDateCreation(LocalDate dateCreation) {
-        this.dateCreation = dateCreation;
-    }
-
-    public EtatCompte getEtat() {
-        return etat;
-    }
-
-    public void setEtat(EtatCompte etat) {
-        this.etat = etat;
-    }
 
     @Override
     public String toString() {

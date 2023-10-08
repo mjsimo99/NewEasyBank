@@ -19,6 +19,7 @@ public interface ICompte {
     List<Compte> FilterByDCreation(LocalDate dateCreation);
     Optional<Compte> Update(Compte compte);
     List<Compte> SearchByOperation(Operation operation);
+    Optional<Compte> AffectCompteToAgance(Compte compte);
 
 
 

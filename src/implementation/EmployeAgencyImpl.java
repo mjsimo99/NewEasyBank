@@ -12,6 +12,8 @@ import java.util.Optional;
 
 public class EmployeAgencyImpl implements IEmployeAgency {
     private static final String INSERT_EMPLOYE_AGENCY = "INSERT INTO EmployesAgency (employe_matricule, agence_code, datedebut, datefin) VALUES (?, ?, ?, ?)";
+    private static final String  TRANSFEREMPLOYE = "UPDATE EmployesAgency SET agence_code = ?, datedebut = ?, datefin = ? WHERE employe_matricule = ? AND agence_code = ?";
+
     @Override
     public Optional<EmployeAgency> Affecter(EmployeAgency employeAgency) {
         Connection connection = DatabaseConnection.getConn();
@@ -38,8 +40,7 @@ public class EmployeAgencyImpl implements IEmployeAgency {
         Connection connection = DatabaseConnection.getConn();
 
         try {
-            String updateQuery = "UPDATE EmployesAgency SET agence_code = ?, datedebut = ?, datefin = ? WHERE employe_matricule = ? AND agence_code = ?";
-            PreparedStatement updateStatement = connection.prepareStatement(updateQuery);
+            PreparedStatement updateStatement = connection.prepareStatement(TRANSFEREMPLOYE);
             updateStatement.setString(1, newAgencyCode);
             updateStatement.setDate(2, java.sql.Date.valueOf(employeAgency.getDatedebut()));
             updateStatement.setDate(3, java.sql.Date.valueOf(employeAgency.getDatefin()));
