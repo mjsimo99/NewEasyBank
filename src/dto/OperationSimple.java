@@ -1,22 +1,26 @@
 package dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.time.LocalDate;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-
-
-public final class OperationSimple extends Operation {
-    TypeOperation type;
+@ToString
+public class OperationSimple extends Operation {
+    private TypeOperation type;
     private Employe employe;
     private Compte compte;
 
+    public OperationSimple(String numero, LocalDate dateCreation, Double montant, TypeOperation type, Employe employe, Compte compte) {
+        super(numero, dateCreation, montant);
+        setType(type);
+        setEmploye(employe);
+        setCompte(compte);
 
-    public <T> OperationSimple(String numero, T datecreation, double montant, TypeOperation type, Object o, Object o1) {
     }
+
+
+
 }

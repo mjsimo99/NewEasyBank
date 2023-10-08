@@ -30,8 +30,9 @@ public final class CompteEpargneImpl implements ICompte {
     private static final String SEARCH_BY_OPERATION = "SELECT c.numero, c.sold, c.dateCreation, c.etat, ce.tauxInteret " +
             "FROM Comptes c " +
             "LEFT JOIN ComptesEpargnes ce ON c.numero = ce.numeroCompte " +
-            "INNER JOIN Operations ao ON c.numero = ao.compte_numero " +
-            "WHERE ao.montant = ?";
+            "INNER JOIN OperationsSimple ao ON c.numero = ao.numeroCompte " +
+            "WHERE ao.type = ?";
+
     private static final String FILTER_BY_STATUS = "SELECT c.numero, c.sold, c.dateCreation, c.etat, ce.tauxInteret " +
             "FROM Comptes c " +
             "LEFT JOIN ComptesEpargnes ce ON c.numero = ce.numeroCompte " +
@@ -42,6 +43,7 @@ public final class CompteEpargneImpl implements ICompte {
             "LEFT JOIN ComptesEpargnes ce ON c.numero = ce.numeroCompte " +
             "WHERE c.dateCreation = ?";
     private static final String AFFECTECOMPTE = "UPDATE Comptes SET agence_code = ? WHERE numero = ?";
+
     public  Compte GetByNumero(String numero) {
         Connection connection = DatabaseConnection.getConn();
         Compte compte = null;

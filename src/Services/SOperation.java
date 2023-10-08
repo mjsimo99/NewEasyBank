@@ -1,10 +1,9 @@
 package Services;
 
-import dto.Compte;
-import dto.Employe;
-import dto.Operation;
-import dto.TypeOperation;
-import implementation.OperationSimple;
+import dto.*;
+import implementation.OperationSimpleImpl;
+import interfeces.ICompte;
+import interfeces.IEmploye;
 import interfeces.IOperation;
 
 import java.time.*;
@@ -14,7 +13,7 @@ import java.util.Scanner;
 
 public class SOperation {
 
-    public static void operationManagement(Scanner scanner, IOperation operationService) {
+    public static void operationManagement(Scanner scanner, IOperation operationService, ICompte compteService, IEmploye employeService) {
 
 
         while (true) {
@@ -29,7 +28,7 @@ public class SOperation {
             scanner.nextLine();
 
             switch (choice) {
-                case 1 -> addOperation(scanner, operationService);
+                case 1 -> addOperation(scanner, operationService,compteService,employeService);
                 case 2 -> searchOperationByNumber(scanner, operationService);
                 case 3 -> deleteOperationByNumber(scanner, operationService);
                 case 4 -> {
@@ -39,11 +38,45 @@ public class SOperation {
             }
         }
     }
-    private static void addOperation(Scanner scanner, IOperation operationService) {
+    private static void addOperation(Scanner scanner, IOperation operationService, ICompte compteService, IEmploye employeService) {
+        System.out.println("Enter Operation Details:");
 
+        System.out.print("Operation Number: ");
+        String operationNumber = scanner.nextLine();
+
+        System.out.print("Date (yyyy-MM-dd): ");
+        String dateStr = scanner.nextLine();
+        LocalDate dateCreation = LocalDate.parse(dateStr);
+
+        System.out.print("Amount: ");
+        double amount = scanner.nextDouble();
+        scanner.nextLine();
+
+        System.out.print("Operation Type (e.g., DEPOSIT, WITHDRAW): ");
+        String typeStr = scanner.nextLine();
+        TypeOperation type = TypeOperation.valueOf(typeStr);
+
+        System.out.print("Employee Matricule: ");
+        String employeeMatricule = scanner.nextLine();
+
+        System.out.print("Compte Numero: ");
+        String compteNumero = scanner.nextLine();
+
+        Compte compte = compteService.GetByNumero(compteNumero);
+        Employe employe = employeService.getEmployeById(employeeMatricule);
+
+
+
+        OperationSimple operationSimple = new OperationSimple(operationNumber, dateCreation, amount, type, employe, compte);
+
+        Optional<Operation> result = operationService.Add(operationSimple);
+
+        if (result.isPresent()) {
+            System.out.println("Operation added successfully: " + result.get());
+        } else {
+            System.out.println("Failed to add operation.");
+        }
     }
-
-
 
 
 
@@ -54,6 +87,7 @@ public class SOperation {
 
         List<Operation> operations = operationService.SearchByNumber(operationNumber);
 
+<<<<<<< HEAD
         if (operations.isEmpty()) {
             System.out.println("No operations found with the specified number.");
         } else {
@@ -61,6 +95,21 @@ public class SOperation {
             for (Operation operation : operations) {
                 System.out.println(operation);
             }
+=======
+        if (!operations.isEmpty()) {
+            System.out.println("Operations with Number '" + operationNumber + "':");
+            for (Operation operation : operations) {
+                if (operation instanceof OperationSimple operationSimple) {
+                    System.out.println("Numero: " + operationSimple.getNumero());
+                    System.out.println("DateCreation: " + operationSimple.getDateCreation());
+                    System.out.println("Montant: " + operationSimple.getMontant());
+                    System.out.println("Type: " + operationSimple.getType());
+                    System.out.println();
+                }
+            }
+        } else {
+            System.out.println("No operations found with the specified number.");
+>>>>>>> EAS-3-Admin-Compte-agence
         }
     }
 

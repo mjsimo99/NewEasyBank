@@ -1,10 +1,8 @@
 package Services;
 
-import helper.DatabaseConnection;
 import implementation.*;
 import interfeces.*;
 
-import java.sql.Connection;
 import java.util.Scanner;
 
 
@@ -15,11 +13,12 @@ public class SMenu {
     private static final IClient clientService = new ClientImpl();
     private static final IMission missionService = new MissionImpl();
     private static final IAffectation affectationService = new AffectationImpl();
-    private static final IOperation operationService = new OperationSimple();
+    private static final IOperation operationService = new OperationSimpleImpl();
     private static final ICompte compteCourantService = new CompteCourantImpl();
     private static final ICompte compteEpargneService = new CompteEpargneImpl();
     private static final IAgence agenceService = new AgenceImpl();
     private static final IEmployeAgency employeAgencyService = new EmployeAgencyImpl();
+    private static final CompteCourantImpl compteService = new CompteCourantImpl();
 
 
     private static final Scanner scanner = new Scanner(System.in);
@@ -60,10 +59,10 @@ public class SMenu {
                     SCOmpteC.compteCourantManagement(scanner, compteCourantService,agenceService);
                     break;
                 case 6:
-                    SCOmpteE.compteEpargneManagement(scanner, compteEpargneService);
+                    SCOmpteE.compteEpargneManagement(scanner, compteEpargneService,agenceService);
                     break;
                 case 7:
-                    SOperation.operationManagement(scanner, operationService);
+                    SOperation.operationManagement(scanner, operationService,compteService,employeService);
                     break;
                 case 8:
                     SAgence.agenceManagement(scanner, agenceService);
