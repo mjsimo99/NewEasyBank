@@ -87,15 +87,6 @@ public class SOperation {
 
         List<Operation> operations = operationService.SearchByNumber(operationNumber);
 
-<<<<<<< HEAD
-        if (operations.isEmpty()) {
-            System.out.println("No operations found with the specified number.");
-        } else {
-            System.out.println("Operations with Number '" + operationNumber + "':");
-            for (Operation operation : operations) {
-                System.out.println(operation);
-            }
-=======
         if (!operations.isEmpty()) {
             System.out.println("Operations with Number '" + operationNumber + "':");
             for (Operation operation : operations) {
@@ -109,7 +100,6 @@ public class SOperation {
             }
         } else {
             System.out.println("No operations found with the specified number.");
->>>>>>> EAS-3-Admin-Compte-agence
         }
     }
 
