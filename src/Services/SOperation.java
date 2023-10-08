@@ -52,28 +52,18 @@ public class SOperation {
         System.out.print("Enter Operation Number to search: ");
         String operationNumber = scanner.nextLine();
 
-        Optional<Optional<List<Operation>>> operationsOptional = Optional.ofNullable(operationService.SearchByNumber(operationNumber));
+        List<Operation> operations = operationService.SearchByNumber(operationNumber);
 
-        if (operationsOptional.isPresent()) {
-            Optional<List<Operation>> innerOptional = operationsOptional.get();
-
-            if (innerOptional.isPresent()) {
-                List<Operation> operations = innerOptional.get();
-                if (operations.isEmpty()) {
-                    System.out.println("No operations found with the specified number.");
-                } else {
-                    System.out.println("Operations with Number '" + operationNumber + "':");
-                    for (Operation operation : operations) {
-                        System.out.println(operation);
-                    }
-                }
-            } else {
-                System.out.println("Failed to retrieve operations with the specified number.");
-            }
+        if (operations.isEmpty()) {
+            System.out.println("No operations found with the specified number.");
         } else {
-            System.out.println("Failed to retrieve operations with the specified number.");
+            System.out.println("Operations with Number '" + operationNumber + "':");
+            for (Operation operation : operations) {
+                System.out.println(operation);
+            }
         }
     }
+
 
 
 

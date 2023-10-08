@@ -111,7 +111,7 @@ public class OperationSimple implements IOperation {
     }
 
     @Override
-    public Optional<List<Operation>> SearchByNumber(String numero) {
+    public List<Operation> SearchByNumber(String numero) {
         List<Operation> resultList = new ArrayList<>();
         Connection connection = DatabaseConnection.getConn();
 
@@ -133,7 +133,8 @@ public class OperationSimple implements IOperation {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return Optional.of(resultList);
+
+        return resultList;
     }
 
     @Override
