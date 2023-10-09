@@ -84,22 +84,18 @@ public class SClient {
     private static void searchClientByCode(Scanner scanner, IClient clientService) {
         System.out.print("Enter Code to search: ");
         String code = scanner.nextLine();
-        Optional<List<Client>> optionalClients = clientService.SearchByCode(code);
+        List<Client> clients = clientService.SearchByCode(code);
 
-        if (optionalClients.isPresent()) {
-            List<Client> clients = optionalClients.get();
-            if (clients.isEmpty()) {
-                System.out.println("No clients found with the specified Code.");
-            } else {
-                System.out.println("Clients with Code '" + code + "':");
-                for (Client client : clients) {
-                    System.out.println(client);
-                }
-            }
-        } else {
+        if (clients.isEmpty()) {
             System.out.println("No clients found with the specified Code.");
+        } else {
+            System.out.println("Clients with Code '" + code + "':");
+            for (Client client : clients) {
+                System.out.println(client);
+            }
         }
     }
+
 
 
     private static void deleteClientByCode(Scanner scanner, IClient clientService) {
@@ -154,55 +150,51 @@ public class SClient {
     private static void updateClient(Scanner scanner, IClient clientService) {
         System.out.print("Enter Code to update: ");
         String code = scanner.nextLine();
-        Optional<List<Client>> clientsOptional = clientService.SearchByCode(code);
-        if (clientsOptional.isPresent()) {
-            List<Client> clients = clientsOptional.get();
-            if (clients.isEmpty()) {
-                System.out.println("No clients found with the specified Code.");
+        List<Client> clients = clientService.SearchByCode(code);
+
+        if (!clients.isEmpty()) {
+            Client clientToUpdate = clients.get(0);
+
+            System.out.println("Update client details:");
+            System.out.print("First Name: ");
+            String firstName = scanner.nextLine();
+
+            System.out.print("Last Name: ");
+            String lastName = scanner.nextLine();
+
+            LocalDate dateOfBirth = null; // Change Date to LocalDate
+            boolean validDateOfBirth = false;
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+            while (!validDateOfBirth) {
+                System.out.print("Date of Birth (yyyy-MM-dd): ");
+                String dateOfBirthStr = scanner.nextLine();
+                try {
+                    dateOfBirth = LocalDate.parse(dateOfBirthStr, formatter);
+                    validDateOfBirth = true;
+                } catch (Exception e) {
+                    System.err.println("Invalid date format. Please enter a date in yyyy-MM-dd format.");
+                }
+            }
+
+            System.out.print("Phone Number: ");
+            String phone = scanner.nextLine();
+
+            System.out.print("Address: ");
+            String address = scanner.nextLine();
+
+            clientToUpdate.setNom(firstName);
+            clientToUpdate.setPrenom(lastName);
+            clientToUpdate.setDateN(dateOfBirth);
+            clientToUpdate.setTel(phone);
+            clientToUpdate.setAdress(address);
+
+            Optional<Client> updatedClientOptional = clientService.Update(clientToUpdate);
+
+            if (updatedClientOptional.isPresent()) {
+                System.out.println("Client with Code '" + code + "' updated successfully.");
             } else {
-                Client clientToUpdate = clients.get(0);
-
-                System.out.println("Update client details:");
-                System.out.print("First Name: ");
-                String firstName = scanner.nextLine();
-
-                System.out.print("Last Name: ");
-                String lastName = scanner.nextLine();
-
-                LocalDate dateOfBirth = null; // Change Date to LocalDate
-                boolean validDateOfBirth = false;
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-                while (!validDateOfBirth) {
-                    System.out.print("Date of Birth (yyyy-MM-dd): ");
-                    String dateOfBirthStr = scanner.nextLine();
-                    try {
-                        dateOfBirth = LocalDate.parse(dateOfBirthStr, formatter);
-                        validDateOfBirth = true;
-                    } catch (Exception e) {
-                        System.err.println("Invalid date format. Please enter a date in yyyy-MM-dd format.");
-                    }
-                }
-
-                System.out.print("Phone Number: ");
-                String phone = scanner.nextLine();
-
-                System.out.print("Address: ");
-                String address = scanner.nextLine();
-
-                clientToUpdate.setNom(firstName);
-                clientToUpdate.setPrenom(lastName);
-                clientToUpdate.setDateN(dateOfBirth);
-                clientToUpdate.setTel(phone);
-                clientToUpdate.setAdress(address);
-
-                Optional<Client> updatedClientOptional = clientService.Update(clientToUpdate);
-
-                if (updatedClientOptional.isPresent()) {
-                    System.out.println("Client with Code '" + code + "' updated successfully.");
-                } else {
-                    System.out.println("Failed to update client with Code '" + code + "'.");
-                }
+                System.out.println("Failed to update client with Code '" + code + "'.");
             }
         } else {
             System.out.println("No clients found with the specified Code.");

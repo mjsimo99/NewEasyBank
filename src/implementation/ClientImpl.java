@@ -24,7 +24,7 @@ public final class ClientImpl implements IClient {
     private static final String ADD_CLIENT = "INSERT INTO Clients (code, nom, prenom, dateN, tel, adress) VALUES (?, ?, ?, ?, ?, ?)";
 
     @Override
-    public Optional<List<Client>> SearchByCode(String code) {
+    public List<Client> SearchByCode(String code) {
         Connection connection = DatabaseConnection.getConn();
         try (
                 PreparedStatement preparedStatement = connection.prepareStatement(SEARCH_BY_CODE)) {
@@ -35,11 +35,12 @@ public final class ClientImpl implements IClient {
                 Client client = getClientFromResultSet(resultSet);
                 resultList.add(client);
             }
-            return resultList.isEmpty() ? Optional.empty() : Optional.of(resultList);
+            return resultList;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
+
 
     @Override
     public boolean Delete(String code) {

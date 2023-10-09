@@ -3,7 +3,7 @@ package View;
 import java.util.Scanner;
 
 public class SSimulation {
-    public static void main(String[] args) {
+    public static double simulate() {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Loan Simulation Calculator");
@@ -14,6 +14,8 @@ public class SSimulation {
         System.out.print("Enter Number of Monthly Payments: ");
         int numberOfMonthlyPayments = scanner.nextInt();
 
+        scanner.nextLine();
+
         double annualInterestRate = 0.12;
         double monthlyInterestRate = annualInterestRate / 12;
 
@@ -22,6 +24,6 @@ public class SSimulation {
 
         System.out.println("\nCalculated Monthly Payment: $" + monthlyPayment);
 
-        scanner.close();
+        return borrowedCapital;
     }
 }
