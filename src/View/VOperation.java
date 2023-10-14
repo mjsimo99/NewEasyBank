@@ -22,9 +22,11 @@ public class VOperation {
             System.out.println("2. Search Operation by Number");
             System.out.println("3. Delete Operation by Number");
             System.out.println("4. Search Operation by Type");
-            System.out.println("5. Back to Main Menu");
+            System.out.println("5. Search Operation by Creation Date");
+            System.out.println("6. Back to Main Menu");
 
-            System.out.print("Enter your choice (1-5): ");
+            System.out.print("Enter your choice (1-6): ");
+
             int choice = scanner.nextInt();
             scanner.nextLine();
 
@@ -33,9 +35,10 @@ public class VOperation {
                 case 2 -> searchOperationByNumber(scanner, operationService);
                 case 3 -> deleteOperationByNumber(scanner, operationService);
                 case 4 -> searchOperationByType(scanner, operationService, operationSimpleService);
+                case 5 -> searchOperationByCreationDate(scanner, operationService);
 
 
-                case 5 -> {
+                case 6 -> {
                     return;
                 }
                 default -> System.out.println("Invalid choice. Please enter a number between 1 and 4.");
@@ -48,9 +51,8 @@ public class VOperation {
         System.out.print("Operation Number: ");
         String operationNumber = scanner.nextLine();
 
-        System.out.print("Date (yyyy-MM-dd): ");
-        String dateStr = scanner.nextLine();
-        LocalDate dateCreation = LocalDate.parse(dateStr);
+
+        LocalDate dateCreation = LocalDate.now();
 
         System.out.print("Amount: ");
         double amount = scanner.nextDouble();
@@ -143,4 +145,27 @@ public class VOperation {
             System.out.println("No operations found with the specified type.");
         }
     }
+    private static void searchOperationByCreationDate(Scanner scanner, IOperation operationService) {
+        System.out.print("Enter Operation Creation Date (yyyy-MM-dd): ");
+        String dateStr = scanner.nextLine();
+        LocalDate creationDate = LocalDate.parse(dateStr);
+
+        List<Operation> operations = operationService.SearchByCreationDate(creationDate);
+
+        if (!operations.isEmpty()) {
+            System.out.println("Operations with Creation Date '" + creationDate + "':");
+            for (Operation operation : operations) {
+                if (operation instanceof OperationSimple operationSimple) {
+                    System.out.println("Numero: " + operationSimple.getNumero());
+                    System.out.println("DateCreation: " + operationSimple.getDateCreation());
+                    System.out.println("Montant: " + operationSimple.getMontant());
+                    System.out.println("Type: " + operationSimple.getType());
+                    System.out.println();
+                }
+            }
+        } else {
+            System.out.println("No operations found with the specified creation date.");
+        }
+    }
+
 }

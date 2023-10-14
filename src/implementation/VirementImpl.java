@@ -18,6 +18,8 @@ public class VirementImpl  implements IVerement {
     ;
     private static final String DELETE_VIREMENT = "DELETE FROM verements WHERE numero = ?";
     private static final String SEARCH_BY_NUMBER = "SELECT * FROM verements WHERE numero=?";
+    private static final String SEARCH_BY_CREATION_DATE = "SELECT * FROM verements WHERE dateCreation = ?"
+    ;
 
     @Override
     public Optional<Operation> Add(Operation operation) {
@@ -88,5 +90,37 @@ public class VirementImpl  implements IVerement {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public List<Operation> SearchByCreationDate(LocalDate creationDate) {
+        List<Operation> resultList = new ArrayList<>();
+        Connection connection = DatabaseConnection.getConn();
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SEARCH_BY_CREATION_DATE)) {
+            preparedStatement.setDate(1, java.sql.Date.valueOf(creationDate));
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                String expediteurNumero = resultSet.getString("expediteur");
+                String beneficiaireNumero = resultSet.getString("Beneficiaire");
+
+                Compte expediteur = new CompteCourant(expediteurNumero, 0.0, null, null, null, null, null, 0.0);
+                Compte beneficiaire = new CompteCourant(beneficiaireNumero, 0.0, null, null, null, null, null, 0.0);
+
+                Operation operation = new Virement(
+                        resultSet.getString("numero"),
+                        resultSet.getObject("dateCreation", LocalDate.class),
+                        resultSet.getDouble("montant"),
+                        expediteur,
+                        beneficiaire
+                );
+                resultList.add(operation);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return resultList;
+    }
+
 
 }

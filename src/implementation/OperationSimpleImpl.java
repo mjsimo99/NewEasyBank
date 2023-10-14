@@ -19,6 +19,7 @@ public class OperationSimpleImpl implements IOperation, IOperationSimple {
     private static final String SEARCH_BY_NUMBER = "SELECT * FROM operationssimple WHERE numero=?";
     private static final String DELETE_OPERATION = "DELETE FROM operationssimple WHERE numero=?";
     private static final String SEARCH_BY_TYPE = "SELECT * FROM operationssimple WHERE type=?";
+    private static final String SEARCH_BY_CREATION_DATE = "SELECT * FROM operationssimple WHERE datecreation=?";
 
 
     @Override
@@ -85,6 +86,32 @@ public class OperationSimpleImpl implements IOperation, IOperationSimple {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public List<Operation> SearchByCreationDate(LocalDate creationDate) {
+        List<Operation> resultList = new ArrayList<>();
+        Connection connection = DatabaseConnection.getConn();
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SEARCH_BY_CREATION_DATE)) {
+            preparedStatement.setDate(1, java.sql.Date.valueOf(creationDate));
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Operation operation = new OperationSimple(
+                        resultSet.getString("numero"),
+                        resultSet.getObject("datecreation", LocalDate.class),
+                        resultSet.getDouble("montant"),
+                        TypeOperation.valueOf(resultSet.getString("type")),
+                        null,
+                        null
+                );
+                resultList.add(operation);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return resultList;
     }
 
 
