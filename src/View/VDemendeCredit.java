@@ -15,11 +15,11 @@ import java.util.Scanner;
 public class VDemendeCredit {
         public static void demendeCreditManagement(Scanner scanner, IDemendeCredit demendeCreditService, IAgence agenceService, IEmploye employeService, IClient clientService) {
             while (true) {
-                System.out.println("Demande de Crédit Management Menu:");
+                System.out.println("Demand de Crédit Management Menu:");
                 System.out.println("1. Add Demand for Credit");
                 System.out.println("2. Search Demand for Credit by Number");
-                System.out.println("3. Delete Demand for Credit by Number");
-                System.out.println("4. Search Demand for Credit by Date"); // Add a new option
+                System.out.println("3. Show All Demand");
+                System.out.println("4. Search Demand for Credit by Date");
                 System.out.println("5. Back to Main Menu");
 
                 System.out.print("Enter your choice (1-5): ");
@@ -31,6 +31,7 @@ public class VDemendeCredit {
                 switch (choice) {
                     case 1 -> addDemandeCredit(scanner, demendeCreditService, agenceService, employeService, clientService);
                     case 2 -> searchDemandeCreditByCode(scanner, demendeCreditService);
+                    case 3 -> showList(demendeCreditService, employeService, clientService);
                     case 4 -> searchDemandeCreditByDate(scanner, demendeCreditService);
                     case 5 -> {
                         return;
@@ -146,4 +147,28 @@ public class VDemendeCredit {
         }
     }
 
+    private static void showList(IDemendeCredit demendeCreditService, IEmploye employeService, IClient clientService) {
+        List<DemendeCredit> creditRequests = demendeCreditService.ShowList();
+
+        if (creditRequests.isEmpty()) {
+            System.out.println("No credit requests found.");
+        } else {
+            System.out.println("List of Credit Requests:");
+            for (DemendeCredit creditRequest : creditRequests) {
+                System.out.println("Credit Request Number: " + creditRequest.getNumero());
+                System.out.println("Date: " + creditRequest.getDate());
+                System.out.println("Montant: " + creditRequest.getMontant());
+                System.out.println("Duree: " + creditRequest.getDuree());
+                System.out.println("Remarque: " + creditRequest.getRemarque());
+                System.out.println("Status: " + creditRequest.getStatus());
+
+                Employe employe = employeService.getEmployeById(creditRequest.getEmploye().getMatricule());
+                Client client = clientService.SearchByCode(creditRequest.getClient().getCode()).get(0);
+
+                System.out.println("Employee Name: " + employe.getNom());
+                System.out.println("Client Name: " + client.getNom());
+                System.out.println();
+            }
+        }
+    }
 }
