@@ -12,4 +12,12 @@ import lombok.NoArgsConstructor;
 public class Virement extends Operation{
     private Compte comptesource;
     private Compte comptedestination;
+
+    @Override
+    public String toString() {
+        return "Virement{" +
+                "comptesource=" + comptesource +
+                ", comptedestination=" + comptedestination +
+                "} " + super.toString();
+    }
 }

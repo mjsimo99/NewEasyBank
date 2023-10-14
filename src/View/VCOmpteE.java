@@ -1,15 +1,16 @@
-package Services;
+package View;
 
 import dto.*;
 import implementation.CompteEpargneImpl;
+import interfeces.IAgence;
 import interfeces.ICompte;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 
-public class SCOmpteE {
-    public static void compteEpargneManagement(Scanner scanner, ICompte compteEpargneService) {
+public class VCOmpteE {
+    public static void compteEpargneManagement(Scanner scanner, ICompte compteEpargneService,IAgence agenceService) {
 
         while (true) {
             System.out.println("Compte Epargne Management Menu:");
@@ -21,9 +22,10 @@ public class SCOmpteE {
             System.out.println("6. Search Compte Epargne by Operation Type");
             System.out.println("7. Filter Comptes Epargne by Status");
             System.out.println("8. Filter Comptes Epargne by Date of Creation");
-            System.out.println("9. Back to Main Menu");
+            System.out.println("9. Affect Compte to Agence");
+            System.out.println("10. Back to Main Menu");
 
-            System.out.print("Enter your choice (1-9): ");
+            System.out.print("Enter your choice (1-10): ");
             int choice = scanner.nextInt();
             scanner.nextLine();
 
@@ -36,7 +38,8 @@ public class SCOmpteE {
                 case 6 -> searchCompteEpargneByOperation(scanner, compteEpargneService);
                 case 7 -> filterComptesEpargneByStatus(scanner, compteEpargneService);
                 case 8 -> filterComptesEpargneByDateOfCreation(scanner, compteEpargneService);
-                case 9 -> {
+                case 9 -> affectCompteToAgence(scanner,compteEpargneService,agenceService);
+                case 10 -> {
                     return;
                 }
                 default -> System.out.println("Invalid choice. Please enter a number between 1 and 9.");
@@ -121,8 +124,10 @@ public class SCOmpteE {
     private static void updateCompteEpargneStatusByNumero(Scanner scanner, ICompte compteEpargneService) {
         System.out.print("Enter Compte Epargne Numero to update status: ");
         String numero = scanner.nextLine();
+        CompteEpargneImpl compteEpargneImpl = new CompteEpargneImpl();
 
-        Compte existingCompte = CompteEpargneImpl.GetByNumero(numero);
+        Compte existingCompte = compteEpargneImpl.GetByNumero(numero);
+
 
         if (existingCompte == null) {
             System.out.println("No Compte Epargne found with the specified Numero.");
@@ -156,9 +161,32 @@ public class SCOmpteE {
         }
     }
 
-    private static void searchCompteEpargneByOperation(Scanner scanner, ICompte compteEpargneService) {
+    private static void searchCompteEpargneByOperation(Scanner scanner, ICompte compteEpargeService) {
+        System.out.print("Enter Operation Type (versement or retrait): ");
+        String operationType = scanner.nextLine();
 
+        TypeOperation typeOperation;
+        try {
+            typeOperation = TypeOperation.valueOf(operationType);
+        } catch (IllegalArgumentException e) {
+            System.err.println("Invalid Operation Type. Please enter 'versement' or 'retrait'.");
+            return;
+        }
+
+        Operation operation = new OperationSimple(null,null,null,typeOperation,null,null);
+        List<Compte> comptes = compteEpargeService.SearchByOperation(operation);
+
+        if (comptes.isEmpty()) {
+            System.out.println("No Comptes found for the specified Operation Type.");
+        } else {
+            System.out.println("Comptes for Operation Type '" + operationType + "':");
+            for (Compte compte : comptes) {
+                System.out.println(compte);
+            }
+        }
     }
+
+
 
     private static void filterComptesEpargneByStatus(Scanner scanner, ICompte compteEpargneService) {
         System.out.print("Enter Status (ACTIVE or INACTIVE): ");
@@ -195,6 +223,29 @@ public class SCOmpteE {
             }
         } catch (DateTimeParseException e) {
             System.err.println("Invalid date format. Please enter a date in yyyy-MM-dd format.");
+        }
+    }
+    public static void affectCompteToAgence(Scanner scanner, ICompte compteService, IAgence agenceService) {
+        System.out.println("Affect Compte to Agence:");
+        System.out.print("Enter Compte Numero: ");
+        String compteNumero = scanner.nextLine();
+
+        System.out.print("Enter Agence Code: ");
+        String agenceCode = scanner.nextLine();
+
+        Optional<Compte> compte = Optional.ofNullable(compteService.GetByNumero(compteNumero));
+        Optional<Agence> agence = agenceService.SearchByCode(agenceCode);
+
+        if (compte.isPresent() && agence.isPresent()) {
+            Optional<Compte> result = compteService.AffectCompteToAgance(compte.get(), agence.get());
+
+            if (result.isPresent()) {
+                System.out.println("Compte " + compteNumero + " affected to Agence " + agenceCode + " successfully!");
+            } else {
+                System.out.println("Failed to affect Compte to Agence.");
+            }
+        } else {
+            System.out.println("Compte or Agence not found with the provided information.");
         }
     }
 }

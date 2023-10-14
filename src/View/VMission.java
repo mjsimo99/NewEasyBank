@@ -1,4 +1,4 @@
-package Services;
+package View;
 
 import dto.Mission;
 import interfeces.IMission;
@@ -6,7 +6,7 @@ import interfeces.IMission;
 import java.util.List;
 import java.util.Scanner;
 
-public class SMission {
+public class VMission {
     public static void missionManagement(Scanner scanner, IMission missionService) {
         while (true) {
             System.out.println("Mission Management Menu:");

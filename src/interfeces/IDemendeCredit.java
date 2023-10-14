@@ -8,9 +8,7 @@ import java.util.Optional;
 
 public interface IDemendeCredit {
     Optional<DemendeCredit> Add(DemendeCredit demendeCredit);
-    List<DemendeCredit> SearchByCode(String code);
 
-    List<DemendeCredit> searchbyClient(Client client);
     List<DemendeCredit> searchByagency(Agence agence);
     List<DemendeCredit> ShowList();
 

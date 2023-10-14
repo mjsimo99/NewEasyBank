@@ -1,9 +1,6 @@
 package interfeces;
 
-import dto.Client;
-import dto.Compte;
-import dto.EtatCompte;
-import dto.Operation;
+import dto.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,7 +16,8 @@ public interface ICompte {
     List<Compte> FilterByDCreation(LocalDate dateCreation);
     Optional<Compte> Update(Compte compte);
     List<Compte> SearchByOperation(Operation operation);
-
+    Optional<Compte> AffectCompteToAgance(Compte compte, Agence agence);
+    Compte GetByNumero(String numero);
 
 
 

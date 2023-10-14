@@ -1,25 +1,29 @@
-package Services;
+package View;
 
-import helper.DatabaseConnection;
+import Services.SEMployeAgency;
 import implementation.*;
 import interfeces.*;
 
-import java.sql.Connection;
 import java.util.Scanner;
 
 
 
-public class SMenu {
+public class VMenu {
     private static final IEmploye employeService = new EmployeImpl();
 
     private static final IClient clientService = new ClientImpl();
     private static final IMission missionService = new MissionImpl();
     private static final IAffectation affectationService = new AffectationImpl();
-    private static final IOperation operationService = new OperationSimple();
+    private static final IOperation operationService = new OperationSimpleImpl();
     private static final ICompte compteCourantService = new CompteCourantImpl();
     private static final ICompte compteEpargneService = new CompteEpargneImpl();
     private static final IAgence agenceService = new AgenceImpl();
     private static final IEmployeAgency employeAgencyService = new EmployeAgencyImpl();
+
+    private static final CompteCourantImpl compteService = new CompteCourantImpl();
+    private static final VirementImpl virementService = new VirementImpl();
+    private static final DemendeCreditImpl demendeCreditService = new DemendeCreditImpl();
+
 
 
     private static final Scanner scanner = new Scanner(System.in);
@@ -36,8 +40,10 @@ public class SMenu {
             System.out.println("7. Operation Management");
             System.out.println("8. Agence Management");
             System.out.println("9. EmployeAgence Management");
+            System.out.println("10. Verement Management");
+            System.out.println("11. DemendeCredit Management");
 
-            System.out.println("10. Exit");
+            System.out.println("12. Exit");
 
             System.out.print("Enter your choice : ");
             int choice = scanner.nextInt();
@@ -45,33 +51,43 @@ public class SMenu {
 
             switch (choice) {
                 case 1:
-                    SEmploye.employeeManagement(scanner, employeService);
+                    VEmploye.employeeManagement(scanner, employeService);
                     break;
                 case 2:
-                    SClient.clientManagement(scanner, clientService);
+                    VClient.clientManagement(scanner, clientService);
                     break;
                 case 3:
-                    SMission.missionManagement(scanner, missionService);
+                    VMission.missionManagement(scanner, missionService);
                     break;
                 case 4:
-                    SAffectation.affectationManagement(scanner, affectationService, employeService, missionService);
+                    VAffectation.affectationManagement(scanner, affectationService, employeService, missionService);
                     break;
                 case 5:
-                    SCOmpteC.compteCourantManagement(scanner, compteCourantService);
+                    VCOmpteC.compteCourantManagement(scanner, compteCourantService,agenceService);
                     break;
                 case 6:
-                    SCOmpteE.compteEpargneManagement(scanner, compteEpargneService);
+                    VCOmpteE.compteEpargneManagement(scanner, compteEpargneService,agenceService);
                     break;
                 case 7:
-                    SOperation.operationManagement(scanner, operationService);
+                    VOperation.operationManagement(scanner, operationService,compteService,employeService);
                     break;
                 case 8:
-                    SAgence.agenceManagement(scanner, agenceService);
+                    VAgence.agenceManagement(scanner, agenceService);
                     break;
                 case 9:
                     SEMployeAgency.employeAgencyManagement(scanner, employeAgencyService, employeService, agenceService);
                     break;
                 case 10:
+                    VEMployeAgency.employeAgencyManagement(scanner, employeAgencyService, employeService, agenceService);
+                    break;
+                case 11:
+                    VVerement.virementManagement(scanner, virementService, compteService);
+                    break;
+                case 12:
+
+                    VDemendeCredit.demendeCreditManagement(scanner, demendeCreditService, agenceService,employeService,clientService);
+                    break;
+                case 13:
                     scanner.close();
                     System.exit(0);
                 default:

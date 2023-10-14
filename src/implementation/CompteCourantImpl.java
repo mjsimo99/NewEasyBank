@@ -30,7 +30,7 @@ public final class CompteCourantImpl implements ICompte {
     private static final String SEARCH_BY_OPERATION = "SELECT c.numero, c.sold, c.dateCreation, c.etat, cc.decouvert " +
             "FROM Comptes c " +
             "LEFT JOIN ComptesCourants cc ON c.numero = cc.numeroCompte " +
-            "INNER JOIN Operations ao ON c.numero = ao.compte_numero " +
+            "INNER JOIN OperationsSimple ao ON c.numero = ao.numeroCompte " +
             "WHERE ao.type = ?";
     private static final String FILTER_BY_STATUS = "SELECT c.numero, c.sold, c.dateCreation, c.etat, cc.decouvert " +
             "FROM Comptes c " +
@@ -41,6 +41,8 @@ public final class CompteCourantImpl implements ICompte {
             "FROM Comptes c " +
             "LEFT JOIN ComptesCourants cc ON c.numero = cc.numeroCompte " +
             "WHERE c.dateCreation = ?";
+    private static final String AFFECTECOMPTE = "UPDATE Comptes SET agence_code = ? WHERE numero = ?";
+
     @Override
     public Optional<Compte> Add(Compte compte) {
         if (compte instanceof CompteCourant compteCourant) {
@@ -170,7 +172,7 @@ public final class CompteCourantImpl implements ICompte {
         return compteList;
     }
 
-    public static Compte GetByNumero(String numero) {
+    public Compte GetByNumero(String numero) {
         Connection connection = DatabaseConnection.getConn();
         Compte compte = null;
 
@@ -244,6 +246,8 @@ public final class CompteCourantImpl implements ICompte {
         return compteList;
     }
 
+
+
     @Override
     public List<Compte> FilterByStatus(EtatCompte etat) {
         List<Compte> compteList = new ArrayList<>();
@@ -295,4 +299,26 @@ public final class CompteCourantImpl implements ICompte {
 
         return compteList;
     }
+
+
+    @Override
+    public Optional<Compte> AffectCompteToAgance(Compte compte, Agence agence) {
+        if (compte != null && agence != null) {
+            Connection connection = DatabaseConnection.getConn();
+            try (PreparedStatement updateCompteStatement = connection.prepareStatement(AFFECTECOMPTE)) {
+                updateCompteStatement.setString(1, agence.getCode());
+                updateCompteStatement.setString(2, compte.getNumero());
+
+                int rowsUpdated = updateCompteStatement.executeUpdate();
+                if (rowsUpdated > 0) {
+                    compte.setAgence(agence);
+                    return Optional.of(compte);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return Optional.empty();
+    }
+
 }

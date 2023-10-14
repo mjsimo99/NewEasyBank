@@ -22,6 +22,11 @@ public class AgenceImpl implements IAgence {
     private static final String SEARCHBYADRESS = "SELECT * FROM Agences WHERE adresse = ?";
     private static final String UPDATEBYCODE =  "UPDATE Agences SET nom = ?, adresse = ?, tel = ? WHERE code = ?";
 
+    private static final String SEARCHBYEMPLOYE =  "SELECT a.* " +
+                                                    "FROM Agences a " +
+                                                    "INNER JOIN employesagency ea ON a.code = ea.agence_code " +
+                                                    "WHERE ea.employe_matricule = ?";
+
 
 
 
@@ -106,8 +111,30 @@ public class AgenceImpl implements IAgence {
 
     @Override
     public List<Agence> SearchByEmployee(Employe employe) {
-        return null;
+        List<Agence> agences = new ArrayList<>();
+        Connection connection = DatabaseConnection.getConn();
+
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SEARCHBYEMPLOYE)) {
+            preparedStatement.setString(1, employe.getMatricule());
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                String agenceCode = resultSet.getString("code");
+                String nom = resultSet.getString("nom");
+                String adresse = resultSet.getString("adresse");
+                String tel = resultSet.getString("tel");
+
+                Agence agence = new Agence(agenceCode, nom, adresse, tel, null, null, null);
+                agences.add(agence);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return agences;
     }
+
 
     @Override
     public List<Agence> SearchByAdress(String adresse) {

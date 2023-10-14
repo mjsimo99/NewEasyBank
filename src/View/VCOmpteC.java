@@ -1,15 +1,16 @@
-package Services;
+package View;
 
 import dto.*;
 import implementation.CompteCourantImpl;
+import interfeces.IAgence;
 import interfeces.ICompte;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 
-public class SCOmpteC {
-    public static void compteCourantManagement(Scanner scanner, ICompte compteCourantService) {
+public class VCOmpteC {
+    public static void compteCourantManagement(Scanner scanner, ICompte compteCourantService, IAgence agenceService) {
         while (true) {
             System.out.println("Compte Management Menu:");
             System.out.println("1. Add Compte");
@@ -20,9 +21,10 @@ public class SCOmpteC {
             System.out.println("6. Search Compte by Operation Type");
             System.out.println("7. Filter Comptes by Status");
             System.out.println("8. Filter Comptes by Date of Creation");
-            System.out.println("9. Back to Main Menu");
+            System.out.println("9. Affect Compte to Agence");
+            System.out.println("10. Back to Main Menu");
 
-            System.out.print("Enter your choice (1-9): ");
+            System.out.print("Enter your choice (1-10): ");
             int choice = scanner.nextInt();
             scanner.nextLine();
 
@@ -35,7 +37,8 @@ public class SCOmpteC {
                 case 6 -> searchCompteCourantByOperation(scanner, compteCourantService);
                 case 7 -> filterComptesCourantByStatus(scanner, compteCourantService);
                 case 8 -> filterComptesCourantByDateOfCreation(scanner, compteCourantService);
-                case 9 -> {
+                case 9 -> affectCompteToAgence(scanner,compteCourantService,agenceService);
+                case 10 -> {
                     return;
                 }
                 default -> System.out.println("Invalid choice. Please enter a number between 1 and 4.");
@@ -119,8 +122,9 @@ public class SCOmpteC {
     private static void updateCompteCourantStatusByNumero(Scanner scanner, ICompte compteCourantService) {
         System.out.print("Enter Compte Numero to update status: ");
         String numero = scanner.nextLine();
+        CompteCourantImpl compteCourantImpl = new CompteCourantImpl();
 
-        Compte existingCompte = CompteCourantImpl.GetByNumero(numero);
+        Compte existingCompte = compteCourantImpl.GetByNumero(numero);
 
         if (existingCompte == null) {
             System.out.println("No Compte found with the specified Numero.");
@@ -153,7 +157,28 @@ public class SCOmpteC {
         }
     }
     private static void searchCompteCourantByOperation(Scanner scanner, ICompte compteCourantService) {
+        System.out.print("Enter Operation Type (versement or retrait): ");
+        String operationType = scanner.nextLine();
 
+        TypeOperation typeOperation;
+        try {
+            typeOperation = TypeOperation.valueOf(operationType);
+        } catch (IllegalArgumentException e) {
+            System.err.println("Invalid Operation Type. Please enter 'versement' or 'retrait'.");
+            return;
+        }
+
+        OperationSimple operationSimple = new OperationSimple(null,null,null,typeOperation,null,null);
+        List<Compte> comptes = compteCourantService.SearchByOperation(operationSimple);
+
+        if (comptes.isEmpty()) {
+            System.out.println("No Comptes found for the specified Operation Type.");
+        } else {
+            System.out.println("Comptes for Operation Type '" + operationType + "':");
+            for (Compte compte : comptes) {
+                System.out.println(compte);
+            }
+        }
     }
 
     private static void filterComptesCourantByStatus(Scanner scanner, ICompte compteCourantService) {
@@ -195,4 +220,27 @@ public class SCOmpteC {
         }
     }
 
+    public static void affectCompteToAgence(Scanner scanner, ICompte compteService, IAgence agenceService) {
+        System.out.println("Affect Compte to Agence:");
+        System.out.print("Enter Compte Numero: ");
+        String compteNumero = scanner.nextLine();
+
+        System.out.print("Enter Agence Code: ");
+        String agenceCode = scanner.nextLine();
+
+        Optional<Compte> compte = Optional.ofNullable(compteService.GetByNumero(compteNumero));
+        Optional<Agence> agence = agenceService.SearchByCode(agenceCode);
+
+        if (compte.isPresent() && agence.isPresent()) {
+            Optional<Compte> result = compteService.AffectCompteToAgance(compte.get(), agence.get());
+
+            if (result.isPresent()) {
+                System.out.println("Compte " + compteNumero + " affected to Agence " + agenceCode + " successfully!");
+            } else {
+                System.out.println("Failed to affect Compte to Agence.");
+            }
+        } else {
+            System.out.println("Compte or Agence not found with the provided information.");
+        }
+    }
 }
