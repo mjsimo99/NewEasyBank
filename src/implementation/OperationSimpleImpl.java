@@ -3,6 +3,7 @@ package implementation;
 import dto.*;
 import helper.DatabaseConnection;
 import interfeces.IOperation;
+import interfeces.IOperationSimple;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,10 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class OperationSimpleImpl implements IOperation {
+public class OperationSimpleImpl implements IOperation, IOperationSimple {
     private static final String ADD_OPERATION = "INSERT INTO operationssimple (numero, datecreation, montant, type, employe_matricule, numeroCompte) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String SEARCH_BY_NUMBER = "SELECT * FROM operationssimple WHERE numero=?";
     private static final String DELETE_OPERATION = "DELETE FROM operationssimple WHERE numero=?";
+    private static final String SEARCH_BY_TYPE = "SELECT * FROM operationssimple WHERE type=?";
+    private static final String SEARCH_BY_CREATION_DATE = "SELECT * FROM operationssimple WHERE datecreation=?";
 
 
     @Override
@@ -83,5 +86,59 @@ public class OperationSimpleImpl implements IOperation {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public List<Operation> SearchByCreationDate(LocalDate creationDate) {
+        List<Operation> resultList = new ArrayList<>();
+        Connection connection = DatabaseConnection.getConn();
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SEARCH_BY_CREATION_DATE)) {
+            preparedStatement.setDate(1, java.sql.Date.valueOf(creationDate));
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Operation operation = new OperationSimple(
+                        resultSet.getString("numero"),
+                        resultSet.getObject("datecreation", LocalDate.class),
+                        resultSet.getDouble("montant"),
+                        TypeOperation.valueOf(resultSet.getString("type")),
+                        null,
+                        null
+                );
+                resultList.add(operation);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return resultList;
+    }
+
+
+    @Override
+    public List<Operation> SearchByType(TypeOperation type) {
+        List<Operation> resultList = new ArrayList<>();
+        Connection connection = DatabaseConnection.getConn();
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SEARCH_BY_TYPE)) {
+            preparedStatement.setString(1, type.name());
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Operation operation = new OperationSimple(
+                        resultSet.getString("numero"),
+                        resultSet.getObject("datecreation", LocalDate.class),
+                        resultSet.getDouble("montant"),
+                        type,
+                        null,
+                        null
+                );
+                resultList.add(operation);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return resultList;
     }
 }

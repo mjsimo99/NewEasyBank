@@ -23,6 +23,9 @@ public class VMenu {
     private static final CompteCourantImpl compteService = new CompteCourantImpl();
     private static final VirementImpl virementService = new VirementImpl();
     private static final DemendeCreditImpl demendeCreditService = new DemendeCreditImpl();
+    private static final IOperationSimple employeSimpleService = new OperationSimpleImpl() {
+    };
+
 
 
 
@@ -69,7 +72,7 @@ public class VMenu {
                     VCOmpteE.compteEpargneManagement(scanner, compteEpargneService,agenceService);
                     break;
                 case 7:
-                    VOperation.operationManagement(scanner, operationService,compteService,employeService);
+                    VOperation.operationManagement(scanner, operationService,compteService,employeService,employeSimpleService);
                     break;
                 case 8:
                     VAgence.agenceManagement(scanner, agenceService);
