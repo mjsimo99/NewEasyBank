@@ -12,6 +12,7 @@ public interface IAgence {
     Optional<Agence> Update(Agence agence);
     List<Agence> SearchByEmployee(Employe employe);
     List<Agence> SearchByAdress(String adresse);
+    List<Agence> ShowList();
 
 
 }

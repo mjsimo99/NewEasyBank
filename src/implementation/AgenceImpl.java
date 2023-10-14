@@ -26,6 +26,7 @@ public class AgenceImpl implements IAgence {
                                                     "FROM Agences a " +
                                                     "INNER JOIN employesagency ea ON a.code = ea.agence_code " +
                                                     "WHERE ea.employe_matricule = ?";
+    private static final String SHOWLIST =  "SELECT * FROM agences";
 
 
 
@@ -161,4 +162,25 @@ public class AgenceImpl implements IAgence {
         return agences;
     }
 
-}
+
+    @Override
+    public List<Agence> ShowList() {
+
+        return null;
+    }
+
+    private Agence getAgenceFromResultSet(ResultSet resultSet) throws SQLException {
+        return new Agence(
+                resultSet.getString("code"),
+                resultSet.getString("nom"),
+                resultSet.getString("adresse"),
+                resultSet.getString("tel"),
+                null,
+                null,
+                null
+        );
+    }
+
+
+
+    }
