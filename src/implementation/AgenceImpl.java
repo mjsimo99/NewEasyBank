@@ -166,7 +166,18 @@ public class AgenceImpl implements IAgence {
     @Override
     public List<Agence> ShowList() {
 
-        return null;
+        Connection connection = DatabaseConnection.getConn();
+        List<Agence> resultList = new ArrayList<>();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SHOWLIST)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Agence agence = getAgenceFromResultSet(resultSet);
+                resultList.add(agence);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return resultList;
     }
 
     private Agence getAgenceFromResultSet(ResultSet resultSet) throws SQLException {

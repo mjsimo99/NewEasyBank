@@ -11,7 +11,7 @@ public interface IEmployeAgency {
     Optional<EmployeAgency> Affecter(EmployeAgency employeAgency);
 
     Optional<EmployeAgency> muter(String oldAgencyCode, String newAgencyCode, EmployeAgency employeAgency);
-    Optional<List<EmployeAgency>> ShowList();
+    List<EmployeAgency> ShowList();
 
 
 }
