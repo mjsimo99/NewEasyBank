@@ -30,9 +30,8 @@ public class VDemendeCredit {
 
                 switch (choice) {
                     case 1 -> addDemandeCredit(scanner, demendeCreditService, agenceService, employeService, clientService);
-                    // case 2 -> searchDemandeCreditByNumero(scanner, demendeCreditService);
-                    // case 3 -> deleteDemandeCreditByNumero(scanner, demendeCreditService);
-                    case 4 -> searchDemandeCreditByDate(scanner, demendeCreditService); // Add a new case
+                    case 2 -> searchDemandeCreditByCode(scanner, demendeCreditService);
+                    case 4 -> searchDemandeCreditByDate(scanner, demendeCreditService);
                     case 5 -> {
                         return;
                     }
@@ -131,4 +130,20 @@ public class VDemendeCredit {
                 System.out.println("Invalid date format. Please use YYYY-MM-DD format.");
             }
         }
+    private static void searchDemandeCreditByCode(Scanner scanner, IDemendeCredit demendeCreditService) {
+        System.out.print("Enter the credit request number to search: ");
+        String code = scanner.nextLine();
+
+        List<DemendeCredit> creditRequests = demendeCreditService.SearchByCode(code);
+
+        if (creditRequests.isEmpty()) {
+            System.out.println("No credit request found for the specified code.");
+        } else {
+            System.out.println("Credit request for the specified code:");
+            for (DemendeCredit creditRequest : creditRequests) {
+                System.out.println(creditRequest);
+            }
+        }
+    }
+
 }

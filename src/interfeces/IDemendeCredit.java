@@ -14,5 +14,6 @@ public interface IDemendeCredit {
 
     List<DemendeCredit> SearchByStatus(CreditStatus status);
     List<DemendeCredit> SearchBydate(LocalDate date);
+    List<DemendeCredit> SearchByCode(String numero);
 
 }
