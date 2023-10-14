@@ -4,6 +4,7 @@ import dto.*;
 import interfeces.ICompte;
 import interfeces.IEmploye;
 import interfeces.IOperation;
+import interfeces.IOperationSimple;
 
 import java.time.*;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.Scanner;
 
 public class VOperation {
 
-    public static void operationManagement(Scanner scanner, IOperation operationService, ICompte compteService, IEmploye employeService) {
+    public static void operationManagement(Scanner scanner, IOperation operationService, ICompte compteService, IEmploye employeService,IOperationSimple operationSimpleService) {
 
 
         while (true) {
@@ -20,9 +21,10 @@ public class VOperation {
             System.out.println("1. Add Operation");
             System.out.println("2. Search Operation by Number");
             System.out.println("3. Delete Operation by Number");
-            System.out.println("4. Back to Main Menu");
+            System.out.println("4. Search Operation by Type");
+            System.out.println("5. Back to Main Menu");
 
-            System.out.print("Enter your choice (1-4): ");
+            System.out.print("Enter your choice (1-5): ");
             int choice = scanner.nextInt();
             scanner.nextLine();
 
@@ -30,7 +32,10 @@ public class VOperation {
                 case 1 -> addOperation(scanner, operationService,compteService,employeService);
                 case 2 -> searchOperationByNumber(scanner, operationService);
                 case 3 -> deleteOperationByNumber(scanner, operationService);
-                case 4 -> {
+                case 4 -> searchOperationByType(scanner, operationService, operationSimpleService);
+
+
+                case 5 -> {
                     return;
                 }
                 default -> System.out.println("Invalid choice. Please enter a number between 1 and 4.");
@@ -115,6 +120,27 @@ public class VOperation {
             System.out.println("Operation with Number '" + operationNumber + "' deleted successfully.");
         } else {
             System.out.println("No operation found with the specified number. Deletion failed.");
+        }
+    }    private static void searchOperationByType(Scanner scanner, IOperation operationService, IOperationSimple operationSimpleService) {
+        System.out.print("Enter Operation Type (e.g., DEPOSIT, WITHDRAW): ");
+        String typeStr = scanner.nextLine();
+        TypeOperation type = TypeOperation.valueOf(typeStr);
+
+        List<Operation> operations = operationSimpleService.SearchByType(type);
+
+        if (!operations.isEmpty()) {
+            System.out.println("Operations with Type '" + type + "':");
+            for (Operation operation : operations) {
+                if (operation instanceof OperationSimple operationSimple) {
+                    System.out.println("Numero: " + operationSimple.getNumero());
+                    System.out.println("DateCreation: " + operationSimple.getDateCreation());
+                    System.out.println("Montant: " + operationSimple.getMontant());
+                    System.out.println("Type: " + operationSimple.getType());
+                    System.out.println();
+                }
+            }
+        } else {
+            System.out.println("No operations found with the specified type.");
         }
     }
 }

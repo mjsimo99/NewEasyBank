@@ -5,6 +5,7 @@ import dto.Virement;
 import interfeces.ICompte;
 import interfeces.IOperation;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -26,6 +27,8 @@ public class VVerement {
 
         switch (choice) {
             case 1 -> addVirement(scanner, virementService, compteService);
+            case 2 -> searchVirement(scanner, virementService);
+            case 3 -> deleteVirement(scanner, virementService);
 
             case 4 -> {
                 return;
@@ -76,6 +79,43 @@ public class VVerement {
             System.out.println("Failed to add the Virement.");
         }
     }
+    private static void deleteVirement(Scanner scanner, IOperation virementService) {
+        System.out.println("Deleting a Virement:");
 
+        System.out.print("Enter Virement Number to delete: ");
+        String virementNumber = scanner.nextLine();
+
+        boolean deleted = virementService.Delete(virementNumber);
+
+        if (deleted) {
+            System.out.println("Virement with number " + virementNumber + " has been deleted.");
+        } else {
+            System.out.println("Failed to delete the Virement with number " + virementNumber);
+        }
+    }
+    private static void searchVirement(Scanner scanner, IOperation virementService) {
+        System.out.println("Searching for a Virement:");
+
+        System.out.print("Enter Virement Number to search: ");
+        String virementNumber = scanner.nextLine();
+
+        List<Operation> virements = virementService.SearchByNumber(virementNumber);
+
+        if (!virements.isEmpty()) {
+            System.out.println("Virements with number " + virementNumber + ":");
+            for (Operation virement : virements) {
+                if (virement instanceof Virement) {
+                    Virement virementObject = (Virement) virement;
+                    System.out.println("Virement Number: " + virementObject.getNumero());
+                    System.out.println("Montant: " + virementObject.getMontant());
+                    System.out.println("Expediteur Compte Number: " + virementObject.getComptesource().getNumero());
+                    System.out.println("Beneficiaire Compte Number: " + virementObject.getComptedestination().getNumero());
+                    System.out.println();
+                }
+            }
+        } else {
+            System.out.println("No virements found with number " + virementNumber);
+        }
+    }
 
 }
