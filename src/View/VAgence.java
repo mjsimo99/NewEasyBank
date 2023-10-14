@@ -22,7 +22,8 @@ public class VAgence {
             System.out.println("4. Search Agence By Address");
             System.out.println("5. Update Agence");
             System.out.println("6. Search Agence By Employee");
-            System.out.println("7. Show List of Agences"); // New option to show the list
+            System.out.println("7. Show List of Agences");
+            System.out.println("8. Back to Main Menu");
 
             System.out.print("Enter your choice (1-7): ");
             int choice = scanner.nextInt();
@@ -35,7 +36,10 @@ public class VAgence {
                 case 4 -> searchByAddress(scanner, agenceService);
                 case 5 -> updateAgence(scanner, agenceService);
                 case 6 -> searchAgenceByEmployee(scanner, agenceService);
-                case 7 -> showAgenceList(agenceService); // Call the showAgenceList method
+                case 7 -> showAgenceList(agenceService);
+                case 8 -> {
+                    return;
+                }
                 default -> System.out.println("Invalid choice. Please enter a number between 1 and 7.");
             }
         }

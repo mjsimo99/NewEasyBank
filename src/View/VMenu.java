@@ -75,7 +75,7 @@ public class VMenu {
                     VAgence.agenceManagement(scanner, agenceService);
                     break;
                 case 9:
-                    SEMployeAgency.employeAgencyManagement(scanner, employeAgencyService, employeService, agenceService);
+                    VEMployeAgency.employeAgencyManagement(scanner, employeAgencyService, employeService, agenceService);
                     break;
                 case 10:
                     VEMployeAgency.employeAgencyManagement(scanner, employeAgencyService, employeService, agenceService);

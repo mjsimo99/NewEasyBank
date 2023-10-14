@@ -88,9 +88,8 @@ public class VEMployeAgency {
         System.out.print("Enter new agency code: ");
         String newAgencyCode = scanner.nextLine();
 
-        System.out.print("Enter start date (yyyy-MM-dd): ");
-        String startDateStr = scanner.nextLine();
-        LocalDate startDate = LocalDate.parse(startDateStr);
+        LocalDate startDate = LocalDate.now();
+
 
         System.out.print("Enter end date (yyyy-MM-dd): ");
         String endDateStr = scanner.nextLine();
