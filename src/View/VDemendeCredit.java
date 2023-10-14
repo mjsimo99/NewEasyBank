@@ -17,13 +17,12 @@ public class VDemendeCredit {
             while (true) {
                 System.out.println("Demand de Crédit Management Menu:");
                 System.out.println("1. Add Demand for Credit");
-                System.out.println("2. Search Demand for Credit by Number");
+                System.out.println("2. Search Demand Credit by Number");
                 System.out.println("3. Show All Demand");
-                System.out.println("4. Search Demand for Credit by Date");
+                System.out.println("4. Search Demand Credit by Date");
                 System.out.println("5. Update Demand Status");
-
-                System.out.println("6. Back to Main Menu");
-
+                System.out.println("6. Search Demand Credit by Status");
+                System.out.println("7. Back to Main Menu");
                 System.out.print("Enter your choice (1-5): ");
                 int choice = scanner.nextInt();
 
@@ -35,7 +34,8 @@ public class VDemendeCredit {
                     case 3 -> showList(demendeCreditService, employeService, clientService);
                     case 4 -> searchDemandeCreditByDate(scanner, demendeCreditService);
                     case 5 -> updateDemandeCreditStatus(scanner, demendeCreditService);
-                    case 6 -> {
+                    case 6 -> searchDemandeCreditByStatus(scanner, demendeCreditService);
+                    case 7 -> {
                         return;
                     }
                     default -> System.out.println("Invalid choice. Please enter a number between 1 and 5.");
@@ -55,7 +55,6 @@ public class VDemendeCredit {
                 System.out.print("Duree (e.g., 12 months): ");
                 String duree = scanner.nextLine();
 
-                double montant = borrowedCapital;
                 System.out.print("Number: ");
                 String numero = scanner.nextLine();
 
@@ -87,7 +86,7 @@ public class VDemendeCredit {
                         DemendeCredit demendeCredit = new DemendeCredit();
                         demendeCredit.setNumero(numero);
                         demendeCredit.setDuree(duree);
-                        demendeCredit.setMontant(montant);
+                        demendeCredit.setMontant(borrowedCapital);
                         demendeCredit.setRemarque(remarque);
                         demendeCredit.setStatus(status);
                         demendeCredit.setClient(client);
@@ -203,4 +202,26 @@ public class VDemendeCredit {
             }
         }
     }
+    private static void searchDemandeCreditByStatus(Scanner scanner, IDemendeCredit demendeCreditService) {
+        System.out.print("Enter the status (EnAttente, Accepte, Refuse) to search for credit requests: ");
+        String statusStr = scanner.nextLine();
+
+        try {
+            CreditStatus status = CreditStatus.valueOf(statusStr);
+
+            List<DemendeCredit> creditRequests = demendeCreditService.SearchByStatus(status);
+
+            if (creditRequests.isEmpty()) {
+                System.out.println("No credit requests found for the specified status.");
+            } else {
+                System.out.println("Credit requests for the specified status:");
+                for (DemendeCredit creditRequest : creditRequests) {
+                    System.out.println(creditRequest);
+                }
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid status. Please enter a valid status.");
+        }
+    }
+
 }

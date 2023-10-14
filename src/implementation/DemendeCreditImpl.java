@@ -19,9 +19,11 @@ public class DemendeCreditImpl implements IDemendeCredit {
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String SEARCH_BY_DATE = "SELECT * FROM DemendeCredits WHERE date = ?";
     String SEARCH_BY_CODE = "SELECT * FROM DemendeCredits WHERE numero = ?";
-    String updateStatusQuery = "UPDATE DemendeCredits SET status = ? WHERE numero = ?";
+    String UPDATE_STATUS = "UPDATE DemendeCredits SET status = ? WHERE numero = ?";
+    String SEARCH_BY_STATUS =  "SELECT * FROM DemendeCredits WHERE status = ?";
 
     @Override
+
     public Optional<DemendeCredit> Add(DemendeCredit demendeCredit) {
         Connection connection = DatabaseConnection.getConn();
 
@@ -84,7 +86,31 @@ public class DemendeCreditImpl implements IDemendeCredit {
 
     @Override
     public List<DemendeCredit> SearchByStatus(CreditStatus status) {
-        return null;
+        List<DemendeCredit> creditRequests = new ArrayList<>();
+        Connection connection = DatabaseConnection.getConn();
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SEARCH_BY_STATUS)) {
+            preparedStatement.setString(1, status.toString());
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                DemendeCredit creditRequest = new DemendeCredit();
+                creditRequest.setNumero(resultSet.getString("numero"));
+                creditRequest.setDate(resultSet.getDate("date").toLocalDate());
+                creditRequest.setMontant(resultSet.getDouble("montant"));
+                creditRequest.setDuree(resultSet.getString("duree"));
+                creditRequest.setRemarque(resultSet.getString("remarque"));
+                creditRequest.setStatus(CreditStatus.valueOf(resultSet.getString("status")));
+                creditRequest.setAgence(new Agence(resultSet.getString("agence_code"), null, null, null, null, null, null));
+                creditRequest.setEmploye(new Employe(null, null, null, null, null, resultSet.getString("employe_matricule"), null, null, null, null, null));
+                creditRequest.setClient(new Client(resultSet.getString("client_code"), null, null, null, null, null, null));
+                creditRequests.add(creditRequest);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return creditRequests;
     }
 
     @Override
@@ -156,7 +182,7 @@ public class DemendeCreditImpl implements IDemendeCredit {
     public Optional<DemendeCredit> UpdateStatus(DemendeCredit demendeCredit) {
         Connection connection = DatabaseConnection.getConn();
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(updateStatusQuery)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_STATUS)) {
             preparedStatement.setString(1, demendeCredit.getStatus().toString());
             preparedStatement.setString(2, demendeCredit.getNumero());
 
