@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
-public class SOperation {
+public class VOperation {
 
     public static void operationManagement(Scanner scanner, IOperation operationService, ICompte compteService, IEmploye employeService) {
 

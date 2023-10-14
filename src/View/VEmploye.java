@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.Scanner;
 
 
-public class SEmploye {
+public class VEmploye {
 
     public static void employeeManagement(Scanner scanner, IEmploye employeService) {
         while (true) {

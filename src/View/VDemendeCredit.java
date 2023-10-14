@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
-public class SDemendeCredit {
+public class VDemendeCredit {
     public static void demendeCreditManagement(Scanner scanner, IDemendeCredit demendeCreditService, IAgence agenceService, IEmploye employeService, IClient clientService) {
         while (true) {
             System.out.println("Demande de Crédit Management Menu:");
@@ -38,7 +38,7 @@ public class SDemendeCredit {
     }
 
     private static void addDemandeCredit(Scanner scanner, IDemendeCredit demendeCreditService, IAgence agenceService, IEmploye employeService, IClient clientService) {
-        double borrowedCapital = SSimulation.simulate();
+        double borrowedCapital = VSimulation.simulate();
 
         System.out.print("Do you want to confirm and insert this demand for credit? (yes/no): ");
         String confirmation = scanner.nextLine().toLowerCase();

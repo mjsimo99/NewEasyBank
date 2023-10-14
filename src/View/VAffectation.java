@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
-public class SAffectation {
+public class VAffectation {
 
     public static void affectationManagement(Scanner scanner, IAffectation affectationService, IEmploye employeService, IMission missionService) {
         while (true) {

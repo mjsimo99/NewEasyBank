@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.Scanner;
 
 
-public class SAgence {
+public class VAgence {
 
 
     public static void agenceManagement(Scanner scanner, IAgence agenceService) {

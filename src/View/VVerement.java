@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Scanner;
 
-public class SVerement {
+public class VVerement {
 
 
     public static void virementManagement(Scanner scanner, IOperation virementService, ICompte compteService) {

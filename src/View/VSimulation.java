@@ -2,7 +2,7 @@ package View;
 
 import java.util.Scanner;
 
-public class SSimulation {
+public class VSimulation {
     public static double simulate() {
         Scanner scanner = new Scanner(System.in);
 

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
-public class SClient {
+public class VClient {
     public static void clientManagement(Scanner scanner, IClient clientService) {
         while (true) {
             System.out.println("Client Management Menu:");

@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 
-public class SCOmpteC {
+public class VCOmpteC {
     public static void compteCourantManagement(Scanner scanner, ICompte compteCourantService, IAgence agenceService) {
         while (true) {
             System.out.println("Compte Management Menu:");

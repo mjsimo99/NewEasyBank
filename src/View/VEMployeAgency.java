@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Scanner;
 
-public class SEMployeAgency {
+public class VEMployeAgency {
     public static void employeAgencyManagement(Scanner scanner, IEmployeAgency employeAgencyService,IEmploye employeService,IAgence agenceService) {
         while (true) {
             System.out.println("EmployeAgency Management Menu:");
