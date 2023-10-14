@@ -12,7 +12,7 @@ public interface IDemendeCredit {
     List<DemendeCredit> searchByagency(Agence agence);
     List<DemendeCredit> ShowList();
 
-    List<DemendeCredit> ListByStatus(CreditStatus status);
-    List<DemendeCredit> ListBydate(LocalDate date);
+    List<DemendeCredit> SearchByStatus(CreditStatus status);
+    List<DemendeCredit> SearchBydate(LocalDate date);
 
 }

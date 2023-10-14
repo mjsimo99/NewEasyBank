@@ -1,15 +1,15 @@
 package implementation;
 
-import dto.Agence;
-import dto.CreditStatus;
-import dto.DemendeCredit;
+import dto.*;
 import helper.DatabaseConnection;
 import interfeces.IDemendeCredit;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,12 +54,41 @@ public class DemendeCreditImpl implements IDemendeCredit {
     }
 
     @Override
-    public List<DemendeCredit> ListByStatus(CreditStatus status) {
+    public List<DemendeCredit> SearchByStatus(CreditStatus status) {
         return null;
     }
 
     @Override
-    public List<DemendeCredit> ListBydate(LocalDate date) {
-        return null;
+    public List<DemendeCredit> SearchBydate(LocalDate date) {
+        List<DemendeCredit> creditRequests = new ArrayList<>();
+        Connection connection = DatabaseConnection.getConn();
+
+        String query = "SELECT * FROM DemendeCredits WHERE date = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setDate(1, java.sql.Date.valueOf(date));
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                DemendeCredit creditRequest = new DemendeCredit();
+                creditRequest.setNumero(resultSet.getString("numero"));
+                creditRequest.setDate(resultSet.getDate("date").toLocalDate());
+                creditRequest.setMontant(resultSet.getDouble("montant"));
+                creditRequest.setDuree(resultSet.getString("duree"));
+                creditRequest.setRemarque(resultSet.getString("remarque"));
+
+                creditRequest.setStatus(CreditStatus.valueOf(resultSet.getString("status")));
+                creditRequest.setAgence(new Agence(resultSet.getString("agence_code"), null, null, null, null,null,null));
+                creditRequest.setEmploye(new Employe(null, null, null, null, null, resultSet.getString("employe_matricule"), null, null, null, null, null));
+                creditRequest.setClient(new Client(resultSet.getString("client_code"), null, null, null, null, null, null));
+
+                creditRequests.add(creditRequest);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return creditRequests;
     }
+
 }
