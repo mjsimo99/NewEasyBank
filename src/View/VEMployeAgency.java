@@ -8,11 +8,12 @@ import interfeces.IEmploye;
 import interfeces.IEmployeAgency;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
 public class VEMployeAgency {
-    public static void employeAgencyManagement(Scanner scanner, IEmployeAgency employeAgencyService,IEmploye employeService,IAgence agenceService) {
+    public static void employeAgencyManagement(Scanner scanner, IEmployeAgency employeAgencyService, IEmploye employeService, IAgence agenceService) {
         while (true) {
             System.out.println("EmployeAgency Management Menu:");
             System.out.println("1. Affecter EmployeAgency");
@@ -25,9 +26,9 @@ public class VEMployeAgency {
             scanner.nextLine();
 
             switch (choice) {
-                case 1 -> affecterEmployeAgency(scanner, employeAgencyService,employeService,agenceService);
-                case 2 -> muterEmployeAgency(scanner, employeAgencyService,employeService,agenceService);
-
+                case 1 -> affecterEmployeAgency(scanner, employeAgencyService, employeService, agenceService);
+                case 2 -> muterEmployeAgency(scanner, employeAgencyService, employeService, agenceService);
+                case 3 -> showEmployeAgencies(employeAgencyService);
                 case 4 -> {
                     return;
                 }
@@ -35,6 +36,7 @@ public class VEMployeAgency {
             }
         }
     }
+
 
 
     public static void affecterEmployeAgency(Scanner scanner, IEmployeAgency employeAgencyService, IEmploye employeService, IAgence agenceService) {
@@ -121,5 +123,18 @@ public class VEMployeAgency {
             }
         }
     }
+    public static void showEmployeAgencies(IEmployeAgency employeAgencyService) {
+        List<EmployeAgency> employeAgencies = employeAgencyService.ShowList();
+
+        if (!employeAgencies.isEmpty()) {
+            System.out.println("List of EmployeAgencies:");
+            for (EmployeAgency employeAgency : employeAgencies) {
+                System.out.println(employeAgency);
+            }
+        } else {
+            System.out.println("No EmployeAgencies found.");
+        }
+    }
+
 }
 

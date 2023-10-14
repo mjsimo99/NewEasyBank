@@ -1,12 +1,17 @@
 package implementation;
 
+import dto.Agence;
+import dto.Employe;
 import dto.EmployeAgency;
 import helper.DatabaseConnection;
 import interfeces.IEmployeAgency;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,7 +67,54 @@ public class EmployeAgencyImpl implements IEmployeAgency {
 
 
     @Override
-    public Optional<List<EmployeAgency>> ShowList() {
-        return Optional.empty();
+    public List<EmployeAgency> ShowList() {
+        List<EmployeAgency> resultList = new ArrayList<>();
+        Connection connection = DatabaseConnection.getConn();
+
+        String query = "SELECT ea.datedebut, ea.datefin, e.matricule AS employe_matricule, e.nom AS employe_nom, a.code AS agence_code, a.nom AS agence_nom " +
+                "FROM EmployesAgency ea " +
+                "INNER JOIN Employes e ON ea.employe_matricule = e.matricule " +
+                "INNER JOIN Agences a ON ea.agence_code = a.code";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                String employeMatricule = resultSet.getString("employe_matricule");
+                String employeNom = resultSet.getString("employe_nom");
+                String agenceCode = resultSet.getString("agence_code");
+                String agenceNom = resultSet.getString("agence_nom");
+                LocalDate datedebut = resultSet.getDate("datedebut").toLocalDate();
+                LocalDate datefin = resultSet.getDate("datefin").toLocalDate();
+
+                Employe employe = new Employe(
+                        employeNom, // nom
+                        "",
+                        LocalDate.now(),
+                        "",
+                        "",
+                        employeMatricule,
+                        LocalDate.now(),
+                        "",
+                        null,
+                        null,
+                        null
+                );
+
+                Agence agence = new Agence();
+                agence.setCode(agenceCode);
+                agence.setNom(agenceNom);
+
+                EmployeAgency employeAgency = new EmployeAgency(agence, employe, datedebut, datefin);
+                resultList.add(employeAgency);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return resultList;
     }
+
+
+
 }
