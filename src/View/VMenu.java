@@ -77,17 +77,15 @@ public class VMenu {
                 case 9:
                     VEMployeAgency.employeAgencyManagement(scanner, employeAgencyService, employeService, agenceService);
                     break;
+
                 case 10:
-                    VEMployeAgency.employeAgencyManagement(scanner, employeAgencyService, employeService, agenceService);
-                    break;
-                case 11:
                     VVerement.virementManagement(scanner, virementService, compteService);
                     break;
-                case 12:
+                case 11:
 
                     VDemendeCredit.demendeCreditManagement(scanner, demendeCreditService, agenceService,employeService,clientService);
                     break;
-                case 13:
+                case 12:
                     scanner.close();
                     System.exit(0);
                 default:
