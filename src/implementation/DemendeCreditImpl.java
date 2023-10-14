@@ -21,6 +21,7 @@ public class DemendeCreditImpl implements IDemendeCredit {
     String SEARCH_BY_CODE = "SELECT * FROM DemendeCredits WHERE numero = ?";
     String UPDATE_STATUS = "UPDATE DemendeCredits SET status = ? WHERE numero = ?";
     String SEARCH_BY_STATUS =  "SELECT * FROM DemendeCredits WHERE status = ?";
+    String SHOW_LIST = "SELECT * FROM DemendeCredits";
 
     @Override
 
@@ -59,9 +60,7 @@ public class DemendeCreditImpl implements IDemendeCredit {
         List<DemendeCredit> creditRequests = new ArrayList<>();
         Connection connection = DatabaseConnection.getConn();
 
-        String query = "SELECT * FROM DemendeCredits";
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SHOW_LIST)) {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
