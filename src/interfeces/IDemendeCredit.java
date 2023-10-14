@@ -9,10 +9,12 @@ import java.util.Optional;
 public interface IDemendeCredit {
     Optional<DemendeCredit> Add(DemendeCredit demendeCredit);
 
-    List<DemendeCredit> searchByagency(Agence agence);
+    List<DemendeCredit> SearchByagency(Agence agence);
     List<DemendeCredit> ShowList();
 
-    List<DemendeCredit> ListByStatus(CreditStatus status);
-    List<DemendeCredit> ListBydate(LocalDate date);
+    List<DemendeCredit> SearchByStatus(CreditStatus status);
+    List<DemendeCredit> SearchBydate(LocalDate date);
+    List<DemendeCredit> SearchByCode(String numero);
+    Optional<DemendeCredit> UpdateStatus(DemendeCredit demendeCredit);
 
 }
