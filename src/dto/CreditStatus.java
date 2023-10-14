@@ -1,7 +1,7 @@
 package dto;
 
 public enum CreditStatus {
-    EnAttente,
+    EnAttante,
     Accepte,
-    refuse
+    Refuse
 }

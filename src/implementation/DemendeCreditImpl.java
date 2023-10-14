@@ -19,6 +19,7 @@ public class DemendeCreditImpl implements IDemendeCredit {
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String SEARCH_BY_DATE = "SELECT * FROM DemendeCredits WHERE date = ?";
     String SEARCH_BY_CODE = "SELECT * FROM DemendeCredits WHERE numero = ?";
+    String updateStatusQuery = "UPDATE DemendeCredits SET status = ? WHERE numero = ?";
 
     @Override
     public Optional<DemendeCredit> Add(DemendeCredit demendeCredit) {
@@ -150,6 +151,26 @@ public class DemendeCreditImpl implements IDemendeCredit {
 
         return creditRequests;
     }
+
+    @Override
+    public Optional<DemendeCredit> UpdateStatus(DemendeCredit demendeCredit) {
+        Connection connection = DatabaseConnection.getConn();
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(updateStatusQuery)) {
+            preparedStatement.setString(1, demendeCredit.getStatus().toString());
+            preparedStatement.setString(2, demendeCredit.getNumero());
+
+            int rowsUpdated = preparedStatement.executeUpdate();
+            if (rowsUpdated > 0) {
+                return Optional.of(demendeCredit);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return Optional.empty();
+    }
+
 
 
 }

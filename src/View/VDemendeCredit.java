@@ -20,12 +20,13 @@ public class VDemendeCredit {
                 System.out.println("2. Search Demand for Credit by Number");
                 System.out.println("3. Show All Demand");
                 System.out.println("4. Search Demand for Credit by Date");
-                System.out.println("5. Back to Main Menu");
+                System.out.println("5. Update Demand Status");
+
+                System.out.println("6. Back to Main Menu");
 
                 System.out.print("Enter your choice (1-5): ");
                 int choice = scanner.nextInt();
 
-                // Consume the newline character
                 scanner.nextLine();
 
                 switch (choice) {
@@ -33,7 +34,8 @@ public class VDemendeCredit {
                     case 2 -> searchDemandeCreditByCode(scanner, demendeCreditService);
                     case 3 -> showList(demendeCreditService, employeService, clientService);
                     case 4 -> searchDemandeCreditByDate(scanner, demendeCreditService);
-                    case 5 -> {
+                    case 5 -> updateDemandeCreditStatus(scanner, demendeCreditService);
+                    case 6 -> {
                         return;
                     }
                     default -> System.out.println("Invalid choice. Please enter a number between 1 and 5.");
@@ -168,6 +170,36 @@ public class VDemendeCredit {
                 System.out.println("Employee Name: " + employe.getNom());
                 System.out.println("Client Name: " + client.getNom());
                 System.out.println();
+            }
+        }
+    }
+    private static void updateDemandeCreditStatus(Scanner scanner, IDemendeCredit demendeCreditService) {
+        System.out.print("Enter the demendcredit number to update the status: ");
+        String code = scanner.nextLine();
+
+        List<DemendeCredit> creditRequests = demendeCreditService.SearchByCode(code);
+
+        if (creditRequests.isEmpty()) {
+            System.out.println("No credit request found for the specified code.");
+        } else {
+            DemendeCredit creditRequest = creditRequests.get(0);
+
+            System.out.print("Enter the new status (EnAttente, Accepte, Refuse): ");
+            String newStatusStr = scanner.nextLine();
+
+            try {
+                CreditStatus newStatus = CreditStatus.valueOf(newStatusStr);
+                creditRequest.setStatus(newStatus);
+
+                Optional<DemendeCredit> updatedCredit = demendeCreditService.UpdateStatus(creditRequest);
+
+                if (updatedCredit.isPresent()) {
+                    System.out.println("Status updated successfully.");
+                } else {
+                    System.out.println("Failed to update status.");
+                }
+            } catch (IllegalArgumentException e) {
+                System.out.println("Invalid status. Please enter a valid status.");
             }
         }
     }
