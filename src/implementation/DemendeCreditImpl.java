@@ -18,10 +18,11 @@ public class DemendeCreditImpl implements IDemendeCredit {
             "(numero, date, montant, duree, remarque, status, agence_code, employe_matricule, client_code) " +
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String SEARCH_BY_DATE = "SELECT * FROM DemendeCredits WHERE date = ?";
-    String SEARCH_BY_CODE = "SELECT * FROM DemendeCredits WHERE numero = ?";
-    String UPDATE_STATUS = "UPDATE DemendeCredits SET status = ? WHERE numero = ?";
-    String SEARCH_BY_STATUS =  "SELECT * FROM DemendeCredits WHERE status = ?";
-    String SHOW_LIST = "SELECT * FROM DemendeCredits";
+    private static final String SEARCH_BY_CODE = "SELECT * FROM DemendeCredits WHERE numero = ?";
+    private static final String UPDATE_STATUS = "UPDATE DemendeCredits SET status = ? WHERE numero = ?";
+    private static final String SEARCH_BY_STATUS =  "SELECT * FROM DemendeCredits WHERE status = ?";
+    private static final String SHOW_LIST = "SELECT * FROM DemendeCredits";
+    private static final String SEARCH_BY_AGENCY = "SELECT * FROM DemendeCredits WHERE agence_code = ?";
 
     @Override
 
@@ -51,8 +52,32 @@ public class DemendeCreditImpl implements IDemendeCredit {
     }
 
     @Override
-    public List<DemendeCredit> searchByagency(Agence agence) {
-        return null;
+    public List<DemendeCredit> SearchByagency(Agence agence) {
+        List<DemendeCredit> creditRequests = new ArrayList<>();
+        Connection connection = DatabaseConnection.getConn();
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SEARCH_BY_AGENCY)) {
+            preparedStatement.setString(1, agence.getCode());
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                DemendeCredit creditRequest = new DemendeCredit();
+                creditRequest.setNumero(resultSet.getString("numero"));
+                creditRequest.setDate(resultSet.getDate("date").toLocalDate());
+                creditRequest.setMontant(resultSet.getDouble("montant"));
+                creditRequest.setDuree(resultSet.getString("duree"));
+                creditRequest.setRemarque(resultSet.getString("remarque"));
+                creditRequest.setStatus(CreditStatus.valueOf(resultSet.getString("status")));
+                creditRequest.setAgence(agence);
+                creditRequest.setEmploye(new Employe(null, null, null, null, null, resultSet.getString("employe_matricule"), null, null, null, null, null));
+                creditRequest.setClient(new Client(resultSet.getString("client_code"), null, null, null, null, null, null));
+                creditRequests.add(creditRequest);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return creditRequests;
     }
 
     @Override

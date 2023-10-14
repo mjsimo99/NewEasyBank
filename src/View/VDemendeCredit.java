@@ -35,7 +35,9 @@ public class VDemendeCredit {
                     case 4 -> searchDemandeCreditByDate(scanner, demendeCreditService);
                     case 5 -> updateDemandeCreditStatus(scanner, demendeCreditService);
                     case 6 -> searchDemandeCreditByStatus(scanner, demendeCreditService);
-                    case 7 -> {
+                    case 7 -> searchDemandeCreditByAgency(scanner, demendeCreditService, agenceService, employeService, clientService);
+
+                    case 8 -> {
                         return;
                     }
                     default -> System.out.println("Invalid choice. Please enter a number between 1 and 5.");
@@ -223,5 +225,40 @@ public class VDemendeCredit {
             System.out.println("Invalid status. Please enter a valid status.");
         }
     }
+    private static void searchDemandeCreditByAgency(Scanner scanner, IDemendeCredit demendeCreditService, IAgence agenceService, IEmploye employeService, IClient clientService) {
+        System.out.print("Enter the agency code to search for credit requests: ");
+        String agencyCode = scanner.nextLine();
+
+        List<DemendeCredit> creditRequests = demendeCreditService.SearchByagency(new Agence(agencyCode, null, null, null, null, null, null));
+
+        if (creditRequests.isEmpty()) {
+            System.out.println("No credit requests found for the specified agency.");
+        } else {
+            System.out.println("Credit requests for the specified agency:");
+            for (DemendeCredit creditRequest : creditRequests) {
+                System.out.println("Credit Request Number: " + creditRequest.getNumero());
+                System.out.println("Date: " + creditRequest.getDate());
+                System.out.println("Montant: " + creditRequest.getMontant());
+                System.out.println("Duree: " + creditRequest.getDuree());
+                System.out.println("Remarque: " + creditRequest.getRemarque());
+                System.out.println("Status: " + creditRequest.getStatus());
+
+                Employe employe = employeService.getEmployeById(creditRequest.getEmploye().getMatricule());
+                System.out.println("Employee Name: " + employe.getNom());
+
+                Client client = clientService.SearchByCode(creditRequest.getClient().getCode()).get(0);
+                System.out.println("Client Name: " + client.getNom());
+
+                Optional<Agence> agenceOptional = agenceService.SearchByCode(agencyCode);
+                if (agenceOptional.isPresent()) {
+                    Agence agence = agenceOptional.get();
+                    System.out.println("Agency Name: " + agence.getNom());
+                }
+
+                System.out.println();
+            }
+        }
+    }
+
 
 }
